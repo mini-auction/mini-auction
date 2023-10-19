@@ -32,21 +32,21 @@ Code 컨벤션
         
 7. 콤마(,)와 세미 콜론(;) 뒤에는 공백을 삽입한다.
         
-        ```java
-        bad example
-        for (int i = 0;i < length;i++) {
-            display(level,message,i)
-        }
+    ```java
+    bad example
+    for (int i = 0;i < length;i++) {
+       display(level,message,i)
+    }
         
-        good example
-        for (int i = 0; i < length; i++) {
-            display(level, message, i)
-        }
-        ```
+    good example
+    for (int i = 0; i < length; i++) {
+       display(level, message, i)
+    }
+    ```
         
 8. 콜론(:)의 앞뒤로는 공백을 삽입한다.
         
-        ```java
+   ```java
         good example
         switch (grade) {
         	case GOLD :
@@ -56,11 +56,11 @@ Code 컨벤션
           default :
             inreasePoint(customer)
         }
-        ```
+   ```
         
 9. 가로로 긴 코드는 지양한다.
         
-        ```java
+    ```java
         bad example
         public void testFunction(String name, String password, int age, String email, String phoneNo){
         }
@@ -96,11 +96,11 @@ Code 컨벤션
         			phoneNo2
         	);
         // ** 파라미터가 너무 많이 필요할 경우, 객체화하는 것을 지향한다. ** 
-        ```
+    ```
         
 10. 닫는 중괄호와 같은 줄에 `else`, `catch`, `finally`, `while` 선언한다.
         
-        ```java
+    ```java
         good example
         if (line.startWith(WARNING_PREFIX)) {
             return LogPattern.WARN;
@@ -118,11 +118,11 @@ Code 컨벤션
         } finally {
             writeFooter();
         }
-        ```
+    ```
         
 11. 조건문 & 반복문에 중괄호 필수 사용한다.
         
-        ```java
+    ```java
         bad example
         if (exp == null) return false; 
         //중괄호 없이 이렇게도 사용이 가능함.
@@ -141,4 +141,4 @@ Code 컨벤션
             }
         
         }
-        ```
+    ```
