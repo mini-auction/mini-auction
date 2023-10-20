@@ -1,10 +1,10 @@
 package com.mini.auction.common;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 
-@Entity
-public class BaseEntity extends Timestamped {
+@MappedSuperclass
+public abstract class BaseEntity extends Timestamped {
     private final boolean isDeleted = false;
 
     @Id
