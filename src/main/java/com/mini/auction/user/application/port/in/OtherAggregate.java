@@ -1,4 +1,4 @@
-package com.mini.auction.user.application.port.out;
+package com.mini.auction.user.application.port.in;
 
 /*
     다른 aggregate 에서 현재의 aggregate 의 모델에 접근해야 할 경우에 해당 인터페이스를 사용하여 필요한 리소스를 가져갈 수 있게한다.

@@ -6,7 +6,7 @@ import com.mini.auction.user.application.port.in.UserSignService;
 
 @RestController
 @RequiredArgsConstructor //기본 생성자를 자동으로 만들어줌.
-class UserSignController {
+class UserRegistrationController {
 
     private final UserSignService userSignService;
 
