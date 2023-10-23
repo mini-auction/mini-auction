@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class ErrorResponse {
     private String code;
     private String message;
-    private Object value;
+    private Object detail;
 
     public ErrorResponse(
         ErrorCode errorCode,
@@ -18,6 +18,6 @@ public class ErrorResponse {
     ){
         this.code = errorCode.name();
         this.message = errorCode.getMessage();
-        this.value = value;
+        this.detail = value;
     }
 }

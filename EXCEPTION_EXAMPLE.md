@@ -51,7 +51,7 @@ URI 변수의 파라미터 타입이 맞지 않을 경우 발생한다.
     {
       "code": "E00002",
       "message": "파라미터 타입이 일치하지 않습니다.",
-      "value": "Required URI template variable 'age' for method parameter type int is not present"
+      "detail": "Required URI template variable 'age' for method parameter type int is not present"
   }
     ``` 
 ----
@@ -68,7 +68,7 @@ param 을 받아야 할 때, 필수 param 이 없을 때 발생한다.
     {
       "code": "E00001",
       "message": "필수 파라미터가 없습니다.",
-      "value": "Required request parameter 'id' for method parameter type String is not present" 
+      "detail": "Required request parameter 'id' for method parameter type String is not present" 
   }
     ``` 
 ---
@@ -87,7 +87,7 @@ param 을 받아야 할 때, param 의 data type 이 맞지 않을 때 발생한
     {
       "code": "E00002",
       "message": "파라미터 타입이 일치하지 않습니다.",
-      "value": "'age' is must be 'int' type." 
+      "detail": "'age' is must be 'int' type." 
   }
     ``` 
 ---
@@ -112,7 +112,7 @@ requestBody 로 받아야할 dto 에서 valid error 가 발생할 경우 발생�
     {
       "code": "E00001",
       "message": "필수 파라미터가 없습니다.",
-      "value": {
+      "detail": {
          "name": "공백일 수 없습니다",
          "age": "10 이하여야 합니다"
       }
@@ -148,7 +148,7 @@ JSON 데이터를 Java 객체로 역직렬화 할 때 발생하는 예외로, �
     {
     "code": "E00003",
     "message": "요청 데이터가 올바르지 않습니다.",
-    "value": {
+    "detail": {
         "Value": "kim",
         "Target Type": "int"
     }
@@ -173,7 +173,7 @@ JSON 데이터를 Java 객체로 역직렬화 할 때 발생하는 예외로, �
     {
       "code": "E00003",
       "message": "요청 데이터가 올바르지 않습니다.",
-       "value": "Cannot deserialize value of type `java.lang.String` from Array value (token `JsonToken.START_ARRAY`)"
+       "detail": "Cannot deserialize value of type `java.lang.String` from Array value (token `JsonToken.START_ARRAY`)"
   }
     ``` 
   request 2 :
@@ -191,7 +191,7 @@ JSON 데이터를 Java 객체로 역직렬화 할 때 발생하는 예외로, �
     {
       "code": "E00003",
       "message": "요청 데이터가 올바르지 않습니다.",
-      "value": "Cannot deserialize value of type `com.mini.auction.FooDto` from Array value (token `JsonToken.START_ARRAY`)"
+      "detail": "Cannot deserialize value of type `com.mini.auction.FooDto` from Array value (token `JsonToken.START_ARRAY`)"
   }
     ``` 
 <br>
@@ -212,7 +212,7 @@ JSON 데이터를 Java 객체로 역직렬화 할 때 발생하는 예외로, �
   {
       "code": "E00003",
       "message": "요청 데이터가 올바르지 않습니다.",
-      "value": "Unexpected character ('-' (code 45)): was expecting comma to separate Object entries"
+      "detail": "Unexpected character ('-' (code 45)): was expecting comma to separate Object entries"
   }
     ``` 
 * example 2 <br>
@@ -229,7 +229,7 @@ JSON 데이터를 Java 객체로 역직렬화 할 때 발생하는 예외로, �
   {
     "code": "E00003",
     "message": "요청 데이터가 올바르지 않습니다.",
-    "value": "Unexpected character ('\\' (code 92)): was expecting double-quote to start field name"
+    "detail": "Unexpected character ('\\' (code 92)): was expecting double-quote to start field name"
   }
     ``` 
 <br>
