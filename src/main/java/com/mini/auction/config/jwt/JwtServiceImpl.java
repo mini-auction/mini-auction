@@ -28,14 +28,14 @@ public class JwtServiceImpl implements JwtService{
 
 
     @Override
-    public <T> String create(Object userinfo){
+    public <T> String create(Object memberInfo){
 
         return Jwts.builder()
                 .signWith(secretKey)
-                .setSubject("user")
+                .setSubject("member")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDATiON_SECOND * 1000L))
-                .claim("userinfo", userinfo)
+                .claim("memberInfo", memberInfo)
                 .compact();
     }
 

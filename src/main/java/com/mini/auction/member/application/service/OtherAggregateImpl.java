@@ -1,4 +1,4 @@
-package com.mini.auction.user.application.service;
+package com.mini.auction.member.application.service;
 
 import org.springframework.stereotype.Service;
 

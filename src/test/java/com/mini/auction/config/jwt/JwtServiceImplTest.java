@@ -21,13 +21,13 @@ class JwtServiceImplTest {
 
     private static SecretKey secretKey;
 
-    private record User(String id, String name){
+    private record Member(String id, String name){
     }
 
     @Test
     void createJwtTest() {
         // when
-        String jwt = jwtService.create(new User("test_id", "test_name"));
+        String jwt = jwtService.create(new Member("test_id", "test_name"));
 
         secretKey = Keys.hmacShaKeyFor("뭐얼마나길어야하노이노마".getBytes(StandardCharsets.UTF_8));
 
@@ -38,7 +38,7 @@ class JwtServiceImplTest {
                 .getBody();
 
         @SuppressWarnings("unchecked")
-        Map<String, Object> value = (LinkedHashMap<String, Object>) claims.get("userinfo");
+        Map<String, Object> value = (LinkedHashMap<String, Object>) claims.get("memberInfo");
 
         // then
         assertEquals("test_id", value.get("id"));
@@ -50,10 +50,10 @@ class JwtServiceImplTest {
         secretKey = Keys.hmacShaKeyFor("뭐얼마나길어야하노이노마".getBytes(StandardCharsets.UTF_8));
         String jwt = Jwts.builder()
                 .signWith(secretKey)
-                .setSubject("user")
+                .setSubject("member")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 10))
-                .claim("user", "test_user")
+                .claim("memberInfo", new Member("test_id", "test_name"))
                 .compact();
 
 
