@@ -1,13 +1,25 @@
 package com.mini.auction.common;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
 
+@Getter
 @MappedSuperclass
 public abstract class BaseEntity extends Timestamped {
-    private final boolean isDeleted = false;
+    @Column
+    private boolean isDeleted = false;
 
     @Id
-    private final String id = Utils.customUUID();
+    @Column(length = 15)
+    private String id = Utils.customUUID();
 
+    public void setField(
+        boolean isDeleted,
+        String id
+    ){
+        this.isDeleted = isDeleted;
+        this.id = id;
+    }
 }
