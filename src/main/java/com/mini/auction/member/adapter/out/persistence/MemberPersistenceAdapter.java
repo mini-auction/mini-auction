@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class MemberPersistenceAdapter {
+class MemberPersistenceAdapter {
     private final MemberRepository memberRepository;
 }

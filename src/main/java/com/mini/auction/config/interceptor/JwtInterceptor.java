@@ -20,7 +20,8 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(
             HttpServletRequest request,
             HttpServletResponse response,
-            Object handler){
+            Object handler
+    ){
 
         final String token = request.getHeader(HEADER_AUTH);
 

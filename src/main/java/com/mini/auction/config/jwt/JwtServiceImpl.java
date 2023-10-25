@@ -13,6 +13,7 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidParameterException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class JwtServiceImpl implements JwtService{
         }
 
         @SuppressWarnings("unchecked")
-        Map<String, Object> value = (LinkedHashMap<String, Object>)claims.get(key);
+        Map<String, Object> value = (HashMap<String, Object>)claims.get(key);
         return value;
 
     }
