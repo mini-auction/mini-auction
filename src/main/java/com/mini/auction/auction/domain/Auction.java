@@ -1,7 +1,7 @@
 package com.mini.auction.auction.domain;
 
+import com.mini.auction.common.domian.BaseEntity;
 import com.mini.auction.common.enums.AuctionState;
-import com.mini.auction.common.BaseEntity;
 
 import java.time.LocalDateTime;
 
