@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,9 +15,21 @@ public class Terms extends BaseEntity {
     private String contents;
     private TermsType type;
 
-    public Terms(
-        String
+    Terms(
+        String id,
+        boolean isDeleted,
+        LocalDateTime createDateTime,
+        LocalDateTime updateDateTime,
+        String contents,
+        TermsType type
     ){
+        this.setField(
+            isDeleted,
+            id
+        );
 
+        this.contents = contents;
+        this.type = type;
     }
 }
+

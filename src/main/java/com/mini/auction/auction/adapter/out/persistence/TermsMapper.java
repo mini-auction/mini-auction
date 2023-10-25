@@ -1,15 +1,15 @@
 package com.mini.auction.auction.adapter.out.persistence;
 
 import com.mini.auction.auction.domain.Terms;
+import org.springframework.stereotype.Component;
 
+@Component
 class TermsMapper {
 
-    Terms mapToTermsModel(TermsEntity termsEntity){
-        Terms t = new Terms();
-
-        return new Terms(
-            termsEntity.getContents(),
-            termsEntity.getType()
+    TermsEntity mapToEntity(Terms terms){
+        return new TermsEntity(
+            terms.getContents(),
+            terms.getType()
         );
     }
 }

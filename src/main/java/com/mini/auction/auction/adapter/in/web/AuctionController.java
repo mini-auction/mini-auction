@@ -1,5 +1,7 @@
 package com.mini.auction.auction.adapter.in.web;
 
+import com.mini.auction.auction.adapter.in.web.dto.CreateAuction;
+import com.mini.auction.auction.application.port.in.AuctionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 class AuctionController {
 
-//    private
-//
-//    @PostMapping("")
-//    void createAuction(
-//        @RequestBody
-//    )
+    private final AuctionService auctionService;
+
+    @PostMapping("")
+    void createAuction(@RequestBody CreateAuction request){
+        auctionService.createAuction(request);
+    }
 }
