@@ -1,4 +1,4 @@
-package com.mini.auction.common;
+package com.mini.auction.common.domian;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
