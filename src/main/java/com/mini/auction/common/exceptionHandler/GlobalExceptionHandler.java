@@ -27,7 +27,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.util.HashMap;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler extends Throwable {
+public class GlobalExceptionHandler{
 
     private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 

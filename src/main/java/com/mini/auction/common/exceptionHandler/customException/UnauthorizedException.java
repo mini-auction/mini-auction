@@ -1,11 +1,12 @@
-package com.mini.auction.config.jwt;
+package com.mini.auction.common.exceptionHandler.customException;
 
+
+import com.mini.auction.common.exceptionHandler.ErrorResponse;
+import lombok.Getter;
 
 import java.io.Serial;
 
-/*
-* TODO: ExceptionHandler 병합 후 리팩토링 필요함
-*/
+@Getter
 public class UnauthorizedException extends RuntimeException{
     /*
     RuntimeException이 상속받는 최상위 class에 Serializable이 존재하기 때문에 Serialize를 위한 serialVersionUID가 필요함
@@ -16,8 +17,11 @@ public class UnauthorizedException extends RuntimeException{
     @Serial
     private static final long serialVersionUID = -2238030302650813813L;
 
-    public UnauthorizedException() {
+    private final ErrorResponse errorMessage;
+
+    public UnauthorizedException(ErrorResponse errorMessage) {
         super("계정 권한이 유효하지 않습니다.\n다시 로그인을 해주세요.");
+        this.errorMessage = errorMessage;
     }
 
 }

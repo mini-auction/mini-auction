@@ -3,6 +3,7 @@ package com.mini.auction.config.jwt;
 import com.mini.auction.common.exceptionHandler.ErrorCode;
 import com.mini.auction.common.exceptionHandler.ErrorResponse;
 import com.mini.auction.common.exceptionHandler.customException.JwtException;
+import com.mini.auction.common.exceptionHandler.customException.UnauthorizedException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -55,9 +57,9 @@ public class JwtServiceImpl implements JwtService{
     }
 
     @Override
-    public Map<String, Object> getClaims(String key) throws com.mini.auction.common.exceptionHandler.customException.JwtException {
+    public Map<String, Object> getClaims(String key) throws JwtException {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String jwt = request.getHeader("Authorization");
+        String jwt = request.getHeader(HttpHeaders.AUTHORIZATION);
         Claims claims = null;
         try {
             claims = Jwts.parserBuilder()
@@ -76,40 +78,39 @@ public class JwtServiceImpl implements JwtService{
     }
 
     @Override
-    public boolean isUsable(String token) throws com.mini.auction.common.exceptionHandler.customException.JwtException {
+    public boolean isUsable(String token) throws JwtException {
         try{
             Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token);
-            return true;
         }catch (Exception e){
             jwtExceptionHandler(e);
-            return false;
         }
+        return true;
     }
 
-    public void jwtExceptionHandler(Exception e) throws com.mini.auction.common.exceptionHandler.customException.JwtException {
+    public void jwtExceptionHandler(Exception e) throws JwtException {
         if (e instanceof ExpiredJwtException exception){ // 토큰 만료
             ErrorResponse error = new ErrorResponse(ErrorCode.E00004, exception.getMessage());
             logger.error("ExpiredJwtException: ", exception);
-            throw new com.mini.auction.common.exceptionHandler.customException.JwtException(error);
+            throw new JwtException(error);
         } else if (e instanceof UnsupportedJwtException exception){ // 토큰 형태 인증 불가
             ErrorResponse error = new ErrorResponse(ErrorCode.E00005, exception.getMessage());
             logger.error("UnsupportedJwtException: ", exception);
-            throw new com.mini.auction.common.exceptionHandler.customException.JwtException(error);
+            throw new JwtException(error);
         } else if (e instanceof MalformedJwtException exception){ // 토큰 구조 불일치
             ErrorResponse error = new ErrorResponse(ErrorCode.E00005, exception.getMessage());
             logger.error("MalformedJwtException: ", exception);
-            throw new com.mini.auction.common.exceptionHandler.customException.JwtException(error);
+            throw new JwtException(error);
         } else if (e instanceof SignatureException exception){ // jwt 서명실패
             ErrorResponse error = new ErrorResponse(ErrorCode.E00005, exception.getMessage());
             logger.error("SignatureException: ", exception);
-            throw new com.mini.auction.common.exceptionHandler.customException.JwtException(error);
+            throw new JwtException(error);
         } else { // 그 외 모든 에러
             ErrorResponse error = new ErrorResponse(ErrorCode.E00005, e.getMessage());
             logger.error("UnauthorizedException: ", e);
-            throw new JwtException(error);
+            throw new UnauthorizedException(error);
         }
     }
 
