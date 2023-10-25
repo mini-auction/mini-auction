@@ -1,6 +1,6 @@
 package com.mini.auction.member.adapter.out.persistence;
 
-import com.mini.auction.common.BaseEntity;
+import com.mini.auction.common.domian.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

@@ -1,5 +1,6 @@
 package com.mini.auction.config.interceptor;
 
+import com.mini.auction.common.exceptionHandler.customException.JwtException;
 import com.mini.auction.config.jwt.JwtService;
 import com.mini.auction.config.jwt.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             HttpServletRequest request,
             HttpServletResponse response,
             Object handler
-    ){
+    ) throws JwtException {
 
         final String token = request.getHeader(HEADER_AUTH);
 
@@ -31,5 +32,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             throw new UnauthorizedException();
         }
     }
+
+
 
 }

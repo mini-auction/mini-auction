@@ -1,4 +1,4 @@
-package com.mini.auction.common;
+package com.mini.auction.common.domian;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
 public class QTimestamped extends EntityPathBase<Timestamped> {
 
-    private static final long serialVersionUID = 1988881831L;
+    private static final long serialVersionUID = 1435661609L;
 
     public static final QTimestamped timestamped = new QTimestamped("timestamped");
 

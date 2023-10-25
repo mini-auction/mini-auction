@@ -1,5 +1,6 @@
-package com.mini.auction.common;
+package com.mini.auction.common.domian;
 
+import com.mini.auction.common.Utils;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
