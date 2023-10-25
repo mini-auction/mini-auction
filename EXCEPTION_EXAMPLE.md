@@ -35,7 +35,7 @@ response :
   Status: 401
     {
       "code": "E00004",
-      "message":"만료된 토큰입니다." 
+      "message":"인증된 사용자가 아닙니다." 
   }
     ``` 
 ----

@@ -91,20 +91,17 @@ public class GlobalExceptionHandler {
         Throwable throwable = e.getMostSpecificCause();
         HashMap<String, Object> params = new HashMap<String, Object>();
         ErrorResponse error;
-        if(throwable instanceof InvalidFormatException) {
-            InvalidFormatException t = ((InvalidFormatException) throwable);
-            logger.error("InvalidFormatException: ", t);
-            params.put("Value" , t.getValue());
-            params.put("Target Type", t.getTargetType());
+        if(throwable instanceof InvalidFormatException exception) {
+            logger.error("InvalidFormatException: ", exception);
+            params.put("Value" , exception.getValue());
+            params.put("Target Type", exception.getTargetType());
             error = new ErrorResponse(ErrorCode.E00003, params);
-        } else if (throwable instanceof MismatchedInputException) {
-            MismatchedInputException t = ((MismatchedInputException) throwable);
-            logger.error("MismatchedInputException: ", t);
-            error = new ErrorResponse(ErrorCode.E00003, t.getOriginalMessage());
-        } else if (throwable instanceof JsonParseException) {
-            JsonParseException t = ((JsonParseException) throwable);
-            logger.error("JsonParseException: ", t);
-            error = new ErrorResponse(ErrorCode.E00003, t.getOriginalMessage());
+        } else if(throwable instanceof MismatchedInputException exception) {
+            logger.error("MismatchedInputException: ", exception);
+            error = new ErrorResponse(ErrorCode.E00003, exception.getOriginalMessage());
+        } else if(throwable instanceof JsonParseException exception) {
+            logger.error("JsonParseException: ", exception);
+            error = new ErrorResponse(ErrorCode.E00003, exception.getOriginalMessage());
         } else {
             logger.error("HttpMessageNotReadableException: ", e);
             error = new ErrorResponse(ErrorCode.E00003, e.getMessage());
