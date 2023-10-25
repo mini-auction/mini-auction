@@ -1,4 +1,4 @@
-package com.mini.auction.common;
+package com.mini.auction.common.domian;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
 public class QBaseEntity extends EntityPathBase<BaseEntity> {
 
-    private static final long serialVersionUID = -929129886L;
+    private static final long serialVersionUID = -1362617696L;
 
     public static final QBaseEntity baseEntity = new QBaseEntity("baseEntity");
 

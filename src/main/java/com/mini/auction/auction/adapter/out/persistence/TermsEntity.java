@@ -1,6 +1,6 @@
 package com.mini.auction.auction.adapter.out.persistence;
 
-import com.mini.auction.common.BaseEntity;
+import com.mini.auction.common.domian.BaseEntity;
 import com.mini.auction.common.enums.TermsType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
