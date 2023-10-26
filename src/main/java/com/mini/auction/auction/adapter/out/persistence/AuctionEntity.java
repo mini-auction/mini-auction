@@ -1,7 +1,7 @@
 package com.mini.auction.auction.adapter.out.persistence;
 
+import com.mini.auction.common.domian.BaseJpaEntity;
 import com.mini.auction.common.enums.AuctionState;
-import com.mini.auction.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "auction")
-class AuctionEntity extends BaseEntity {
+class AuctionEntity extends BaseJpaEntity {
 
     @Comment("판매자 id")
     @Column(length = 100, nullable = false)

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TermsPersistenceAdapter {
+class TermsPersistenceAdapter {
     private final TermsRepository termsRepository;
     private final TermsMapper termsMapper;
 

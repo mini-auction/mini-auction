@@ -4,7 +4,7 @@ import com.mini.auction.auction.adapter.in.web.dto.CreateAuction;
 
 public interface AuctionService {
 
-    public void createAuction(CreateAuction request);
+    void createAuction(CreateAuction request);
 
 
 }

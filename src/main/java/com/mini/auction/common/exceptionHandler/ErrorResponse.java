@@ -20,4 +20,11 @@ public class ErrorResponse {
         this.message = errorCode.getMessage();
         this.detail = value;
     }
+
+    public ErrorResponse(
+        ErrorCode errorCode
+    ){
+        this.code = errorCode.name();
+        this.message = errorCode.getMessage();
+    }
 }

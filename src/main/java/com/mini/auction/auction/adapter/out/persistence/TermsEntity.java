@@ -1,6 +1,6 @@
 package com.mini.auction.auction.adapter.out.persistence;
 
-import com.mini.auction.common.domian.BaseEntity;
+import com.mini.auction.common.domian.BaseJpaEntity;
 import com.mini.auction.common.enums.TermsType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "terms")
-class TermsEntity extends BaseEntity {
+class TermsEntity extends BaseJpaEntity {
 
     @Column
     private String contents;

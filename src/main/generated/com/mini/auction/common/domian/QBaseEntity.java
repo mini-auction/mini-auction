@@ -19,17 +19,11 @@ public class QBaseEntity extends EntityPathBase<BaseEntity> {
 
     public static final QBaseEntity baseEntity = new QBaseEntity("baseEntity");
 
-    public final QTimestamped _super = new QTimestamped(this);
-
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> createDateTime = _super.createDateTime;
+    public final BooleanPath deleted = createBoolean("deleted");
 
     public final StringPath id = createString("id");
 
     public final BooleanPath isDeleted = createBoolean("isDeleted");
-
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> updateDateTime = _super.updateDateTime;
 
     public QBaseEntity(String variable) {
         super(BaseEntity.class, forVariable(variable));

@@ -1,6 +1,5 @@
 package com.mini.auction.common.exceptionHandler;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
 @Getter

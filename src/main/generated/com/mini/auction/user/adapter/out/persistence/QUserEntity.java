@@ -19,7 +19,7 @@ public class QUserEntity extends EntityPathBase<UserEntity> {
 
     public static final QUserEntity userEntity = new QUserEntity("userEntity");
 
-    public final com.mini.auction.common.domian.QBaseEntity _super = new com.mini.auction.common.domian.QBaseEntity(this);
+    public final com.mini.auction.common.domian.QBaseJpaEntity _super = new com.mini.auction.common.domian.QBaseJpaEntity(this);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createDateTime = _super.createDateTime;
