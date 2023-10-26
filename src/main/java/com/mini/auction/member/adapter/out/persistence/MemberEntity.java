@@ -1,4 +1,4 @@
-package com.mini.auction.user.adapter.out.persistence;
+package com.mini.auction.member.adapter.out.persistence;
 
 import com.mini.auction.common.domian.BaseEntity;
 import jakarta.persistence.Column;
@@ -16,8 +16,8 @@ import org.hibernate.annotations.Comment;
 @Entity
 @AllArgsConstructor //모든 필드를 매개변수로 받는 생성자를 자동으로 생성
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //기본 생성자 자동 생성, 생성된 생성자는 동일 패키지 내에서 또는 서브클래스에서만 접근할 수 있다.
-@Table(name = "user")
-class UserEntity extends BaseEntity {
+@Table(name = "member")
+class MemberEntity extends BaseEntity {
 
     @Comment("이름")
     @Column(length = 100, nullable = false)

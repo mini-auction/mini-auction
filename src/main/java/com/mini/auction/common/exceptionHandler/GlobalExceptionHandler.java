@@ -6,6 +6,11 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.mini.auction.common.exceptionHandler.customException.BadRequestException;
 import com.mini.auction.common.exceptionHandler.customException.NotFoundResourceException;
 import com.mini.auction.common.exceptionHandler.customException.NotFoundUserException;
+import io.jsonwebtoken.ClaimJwtException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,7 +27,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.util.HashMap;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler{
 
     private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
@@ -116,4 +121,5 @@ public class GlobalExceptionHandler {
         logger.error("Server Exception: ", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
+
 }
