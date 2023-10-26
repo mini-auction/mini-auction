@@ -1,5 +1,6 @@
 package com.mini.auction.member.adapter.out.persistence;
 
+import com.mini.auction.member.application.port.out.FindMemberPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +9,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-class MemberPersistenceAdapter {
+class MemberPersistenceAdapter implements
+    FindMemberPort {
     private final MemberRepository memberRepository;
+
+    @Override
+    public boolean existById(String id) {
+        return memberRepository.existsById(id);
+    }
 }
