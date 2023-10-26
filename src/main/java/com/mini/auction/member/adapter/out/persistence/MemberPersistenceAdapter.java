@@ -1,4 +1,4 @@
-package com.mini.auction.user.adapter.out.persistence;
+package com.mini.auction.member.adapter.out.persistence;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class UserPersistenceAdapter {
-    private final UserRepository userRepository;
+class MemberPersistenceAdapter {
+    private final MemberRepository memberRepository;
 }
