@@ -7,17 +7,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class ErrorResponse {
-    private String code;
-    private String message;
+public class ExceptionResponse extends CustomResponse {
     private Object detail;
 
-    public ErrorResponse(
-        ErrorCode errorCode,
+    public ExceptionResponse(
+        ExceptionCode exceptionCode,
         Object value
     ){
-        this.code = errorCode.name();
-        this.message = errorCode.getMessage();
+        super(exceptionCode);
         this.detail = value;
     }
 }

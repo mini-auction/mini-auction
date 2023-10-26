@@ -3,12 +3,13 @@ package com.mini.auction.common.exceptionHandler.customException;
 import com.mini.auction.common.exceptionHandler.CustomResponse;
 import lombok.Getter;
 
-//모든 잘 못된 요청에 대한 익셉션
+//로그인 실패 혹은 토큰이 없을 때.
 @Getter
-public class BadRequestException extends IllegalArgumentException {
+public class NotFoundAuthException extends IllegalArgumentException {
+
     private final CustomResponse errorMessage;
 
-    public BadRequestException(CustomResponse errorMessage){
+    public NotFoundAuthException(CustomResponse errorMessage) {
         this.errorMessage = errorMessage;
     }
 }
