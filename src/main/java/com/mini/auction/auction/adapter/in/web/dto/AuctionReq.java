@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuctionReq {
+
+    //TODO : 토큰에서 꺼내오도록 수정하면 지우기.
     @NotBlank
     private String sellerId;
 
