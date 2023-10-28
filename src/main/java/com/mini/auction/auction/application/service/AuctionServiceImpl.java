@@ -26,11 +26,11 @@ class AuctionServiceImpl implements AuctionService {
     @Override
     public void createAuction(AuctionReq.CreateAuction req) {
         //sellerId 체크 //TODO : 토큰에서 꺼내오기.
-        if (!findMemberPort.existById(req.getSellerId())) {
+        if (!findMemberPort.existsByIdAndIsDeletedFalse(req.getSellerId())) {
             throw new BadRequestException(new ErrorResponse(ErrorCode.E10000));
         }
         //termsId 체크
-        if (!findTermsPort.existById(req.getTermsId())){
+        if (!findTermsPort.existsByIdAndIsDeletedFalse(req.getTermsId())){
             throw new BadRequestException(new ErrorResponse(ErrorCode.E20000));
         }
         //경매 약관 동의
@@ -47,13 +47,33 @@ class AuctionServiceImpl implements AuctionService {
         auctionTermsMappingLogPort.save(auctionId, req.getTermsId());
     }
 
+    @Transactional
     @Override
     public void updateAuction(String id, AuctionReq req) {
         //TODO : 토큰에서 사용자 id 꺼낸 후 , 게시글쓴이가 맞는지 체크.
-        if (!auctionPort.existById(id)){
-            throw new BadRequestException(new ErrorResponse(ErrorCode.E00001));
+        if (!auctionPort.existsByIdAndIsDeletedFalse(id)){
+            throw new BadRequestException(new ErrorResponse(ErrorCode.E30000));
         }
         auctionPort.updateDetailById(id, req);
+    }
+
+    @Override
+    public AuctionDetailRes getAuctionDetail(String id) {
+        AuctionDetailRes detailRes = auctionPort.getAuctionDetailById(id);
+        if (detailRes == null){
+            throw new BadRequestException(new ErrorResponse(ErrorCode.E30000));
+        }
+        detailRes.setCommentsList(auctionPort.getCommentsListByAuctionId(id));
+        return detailRes;
+    }
+
+    @Override
+    @Transactional
+    public void removeAuction(String id) {
+        if (!auctionPort.existsByIdAndIsDeletedFalse(id)){
+            throw new BadRequestException(new ErrorResponse(ErrorCode.E30000));
+        }
+        auctionPort.updateIsDeletedById(id, true);
     }
 
 }

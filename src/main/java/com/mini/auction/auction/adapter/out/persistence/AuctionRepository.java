@@ -4,4 +4,7 @@ import com.mini.auction.auction.adapter.out.persistence.infrastructure.AuctionCu
 import org.springframework.data.jpa.repository.JpaRepository;
 
 interface AuctionRepository extends JpaRepository<AuctionEntity, String>, AuctionCustomRepository {
+
+    boolean existsByIdAndIsDeletedFalse(String id);
+
 }

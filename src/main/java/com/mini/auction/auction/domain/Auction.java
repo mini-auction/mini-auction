@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,6 +22,8 @@ public class Auction extends BaseEntity {
     private AuctionDetail detail;
 
     private AuctionState state = AuctionState.WAITING;
+
+    private List<Comments> comments = new ArrayList<Comments>();
 
     public Auction setBaseEntity(boolean isDeleted, String id){
         this.id = id;

@@ -7,6 +7,7 @@ import com.mini.auction.common.enums.AuctionState;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 @Component
 class AuctionEntityMapper {
@@ -19,7 +20,8 @@ class AuctionEntityMapper {
             auction.getDetail().getOpenDateTime(),
             auction.getDetail().getClosedDateTime(),
             auction.getDetail().getMinimumBidAmount(),
-            auction.getState()
+            auction.getState(),
+            Collections.emptyList()
         );
     }
 
@@ -33,7 +35,8 @@ class AuctionEntityMapper {
                 createAuction.getClosedDateTime(),
                 createAuction.getMinimumBidAmount()
             ),
-            AuctionState.WAITING
+            AuctionState.WAITING,
+            Collections.emptyList()
         );
     }
 
@@ -50,6 +53,7 @@ class AuctionEntityMapper {
                 )
             )
             .state(auctionEntity.getState())
+            .comments(Collections.emptyList())
             .build()
             .setBaseEntity(auctionEntity.isDeleted(), auctionEntity.getId());
     }

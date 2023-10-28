@@ -1,6 +1,8 @@
 package com.mini.auction.auction.adapter.out.persistence;
 
+import com.mini.auction.auction.adapter.in.web.dto.AuctionDetailRes;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
+import com.mini.auction.auction.adapter.in.web.dto.CommentsInfo;
 import com.mini.auction.auction.application.port.out.AuctionPort;
 import com.mini.auction.auction.domain.Auction;
 import com.mini.auction.auction.domain.AuctionDetail;
@@ -9,6 +11,8 @@ import com.mini.auction.common.exceptionHandler.ErrorResponse;
 import com.mini.auction.common.exceptionHandler.customException.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -24,8 +28,8 @@ class AuctionPersistenceAdapter implements AuctionPort {
     }
 
     @Override
-    public boolean existById(String id) {
-        return auctionRepository.existsById(id);
+    public boolean existsByIdAndIsDeletedFalse(String id) {
+        return auctionRepository.existsByIdAndIsDeletedFalse(id);
     }
 
     @Override
@@ -44,6 +48,21 @@ class AuctionPersistenceAdapter implements AuctionPort {
     public Auction findById(String id) {
         AuctionEntity auctionEntity = auctionRepository.findById(id).orElseThrow(() -> new BadRequestException(new ErrorResponse(ErrorCode.E00001)));
         return auctionEntityMapper.mapToDomain(auctionEntity);
+    }
+
+    @Override
+    public AuctionDetailRes getAuctionDetailById(String id) {
+        return auctionRepository.getAuctionDetailById(id);
+    }
+
+    @Override
+    public List<CommentsInfo> getCommentsListByAuctionId(String auctionId) {
+        return auctionRepository.getCommentsListByAuctionId(auctionId);
+    }
+
+    @Override
+    public void updateIsDeletedById(String id, boolean state) {
+        auctionRepository.updateIsDeletedById(id, state);
     }
 
 

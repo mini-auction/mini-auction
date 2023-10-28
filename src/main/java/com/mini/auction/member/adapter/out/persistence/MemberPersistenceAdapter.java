@@ -14,7 +14,7 @@ class MemberPersistenceAdapter implements
     private final MemberRepository memberRepository;
 
     @Override
-    public boolean existById(String id) {
-        return memberRepository.existsById(id);
+    public boolean existsByIdAndIsDeletedFalse(String id) {
+        return memberRepository.existsByIdAndIsDeletedFalse(id);
     }
 }

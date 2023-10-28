@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 class TermsPersistenceAdapter implements FindTermsPort {
     private final TermsRepository termsRepository;
     @Override
-    public boolean existById(String id) {
-        return termsRepository.existsById(id);
+    public boolean existsByIdAndIsDeletedFalse(String id) {
+        return termsRepository.existsByIdAndIsDeletedFalse(id);
     }
 }
