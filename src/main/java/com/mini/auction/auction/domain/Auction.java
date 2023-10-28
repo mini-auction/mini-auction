@@ -1,42 +1,32 @@
 package com.mini.auction.auction.domain;
 
-import com.mini.auction.auction.adapter.in.web.dto.CreateAuction;
+import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.common.domian.BaseEntity;
 import com.mini.auction.common.enums.AuctionState;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 public class Auction extends BaseEntity {
 
     private String sellerId;
 
-    private String title;
+    private AuctionDetail detail;
 
-    private String contents;
+    private AuctionState state = AuctionState.WAITING;
 
-    private LocalDateTime openDateTime;
-
-    private LocalDateTime closedDateTime;
-
-    private int minimumBidAmount = 0;
-
-    private final AuctionState state = AuctionState.WAITING;
-
-    public static Auction createAuction(CreateAuction createAuction){
-        return new Auction(
-            createAuction.getSellerId(),
-            createAuction.getTitle(),
-            createAuction.getContents(),
-            createAuction.getOpenDateTime(),
-            createAuction.getClosedDateTime(),
-            createAuction.getMinimumBidAmount()
-        );
+    public Auction setBaseEntity(boolean isDeleted, String id){
+        this.id = id;
+        this.isDeleted = isDeleted;
+        return this;
     }
 
+    public void update(AuctionDetail detail){
+        this.detail = detail;
+    }
 }

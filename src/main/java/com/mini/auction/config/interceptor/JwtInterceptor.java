@@ -23,8 +23,11 @@ public class JwtInterceptor implements HandlerInterceptor {
             Object handler
     ) throws JwtException {
         final String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-        return token != null && jwtService.isUsable(token);
+        if (token == null) {
+            response.setStatus(401);
+            return false;
+        }
+        return jwtService.isUsable(token);
     }
 
 

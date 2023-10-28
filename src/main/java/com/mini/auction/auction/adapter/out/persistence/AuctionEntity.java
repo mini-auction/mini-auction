@@ -2,11 +2,10 @@ package com.mini.auction.auction.adapter.out.persistence;
 
 import com.mini.auction.common.domian.BaseJpaEntity;
 import com.mini.auction.common.enums.AuctionState;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
@@ -14,6 +13,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 @Table(name = "auction")
 class AuctionEntity extends BaseJpaEntity {
@@ -44,6 +44,9 @@ class AuctionEntity extends BaseJpaEntity {
 
     @Comment("경매 상태")
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AuctionState state = AuctionState.WAITING;
+
+
 
 }

@@ -11,14 +11,10 @@ import lombok.Getter;
 @MappedSuperclass
 public abstract class BaseJpaEntity extends Timestamped {
     @Column
-    private boolean isDeleted;
+    private final boolean isDeleted = false;
 
     @Id
     @Column(length = 15)
-    private String id;
+    private final String id = Utils.customUUID();;
 
-    public void setField(String id, boolean isDeleted){ //함수명이 적절한지 잘 모르겠음.
-        this.id = id;
-        this.isDeleted = isDeleted;
-    }
 }
