@@ -6,7 +6,6 @@ import com.mini.auction.auction.application.port.in.AuctionService;
 import com.mini.auction.auction.application.port.out.AuctionPort;
 import com.mini.auction.auction.application.port.out.AuctionTermsMappingLogPort;
 import com.mini.auction.auction.application.port.out.FindTermsPort;
-import com.mini.auction.auction.domain.Auction;
 import com.mini.auction.common.exceptionHandler.ErrorCode;
 import com.mini.auction.common.exceptionHandler.ErrorResponse;
 import com.mini.auction.common.exceptionHandler.customException.BadRequestException;
@@ -54,7 +53,7 @@ class AuctionServiceImpl implements AuctionService {
         if (!auctionPort.existById(id)){
             throw new BadRequestException(new ErrorResponse(ErrorCode.E00001));
         }
-        auctionPort.updateById(id, req);
+        auctionPort.updateDetailById(id, req);
     }
 
 }

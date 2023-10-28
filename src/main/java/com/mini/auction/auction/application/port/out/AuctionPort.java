@@ -8,7 +8,7 @@ public interface AuctionPort {
 
     boolean existById(String id);
 
-    void updateById(String id, AuctionReq req);
+    void updateDetailById(String id, AuctionReq req);
 
     Auction findById(String id);
 

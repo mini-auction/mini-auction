@@ -29,7 +29,7 @@ class AuctionPersistenceAdapter implements AuctionPort {
     }
 
     @Override
-    public void updateById(String id, AuctionReq req) {
+    public void updateDetailById(String id, AuctionReq req) {
         AuctionDetail detail = auctionEntityMapper.mapToAuctionDetail(
             req.getTitle(),
             req.getContents(),
