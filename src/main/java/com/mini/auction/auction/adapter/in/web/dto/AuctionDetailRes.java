@@ -1,8 +1,6 @@
 package com.mini.auction.auction.adapter.in.web.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mini.auction.auction.domain.AuctionDetail;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

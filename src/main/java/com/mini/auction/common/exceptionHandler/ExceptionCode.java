@@ -3,9 +3,10 @@ package com.mini.auction.common.exceptionHandler;
 import lombok.Getter;
 
 @Getter
-public enum ErrorCode {
+public enum ExceptionCode {
     /**
      * E0000x : common
+     * E01xxx : money
      * E1xxxx : member
      * E2xxxx : terms
      * E3xxxx : auction
@@ -19,6 +20,8 @@ public enum ErrorCode {
     E00004("만료된 토큰입니다."),
     E00005("유효하지 않은 토큰입니다."),
     E00006("토큰이 없습니다."),
+
+    E01000("금액은 0보다 작을 수 없습니다."),
 
 
     E10000("id와 일치하는 회원이 없습니다."),
@@ -38,7 +41,7 @@ public enum ErrorCode {
         return this.message;
     }
 
-    ErrorCode(String message){
+    ExceptionCode(String message){
         this.code = this.name();
         this.message = message;
     }

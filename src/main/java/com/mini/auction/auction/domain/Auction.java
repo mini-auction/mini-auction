@@ -1,6 +1,5 @@
 package com.mini.auction.auction.domain;
 
-import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.common.domian.BaseEntity;
 import com.mini.auction.common.enums.AuctionState;
 import lombok.AllArgsConstructor;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
@@ -21,17 +19,23 @@ public class Auction extends BaseEntity {
 
     private AuctionDetail detail;
 
-    private AuctionState state = AuctionState.WAITING;
+    private AuctionState state;
 
-    private List<Comments> comments = new ArrayList<Comments>();
+    private List<Comments> comments;
 
-    public Auction setBaseEntity(boolean isDeleted, String id){
-        this.id = id;
-        this.isDeleted = isDeleted;
-        return this;
-    }
-
-    public void update(AuctionDetail detail){
+    public Auction(
+        String sellerId,
+        AuctionDetail detail,
+        AuctionState state,
+        List<Comments> comments,
+        String id,
+        boolean isDeleted
+    ){
+        super(isDeleted, id);
+        this.sellerId = sellerId;
         this.detail = detail;
+        this.state = state;
+        this.comments = comments;
     }
+
 }

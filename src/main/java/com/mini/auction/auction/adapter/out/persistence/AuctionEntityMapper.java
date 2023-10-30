@@ -3,14 +3,17 @@ package com.mini.auction.auction.adapter.out.persistence;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.auction.domain.Auction;
 import com.mini.auction.auction.domain.AuctionDetail;
+import com.mini.auction.common.domian.Money;
 import com.mini.auction.common.enums.AuctionState;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Component
 class AuctionEntityMapper {
+    private CommentsEntityMapper commentsEntityMapper;
 
     AuctionEntity mapToEntity(Auction auction){
         return new AuctionEntity(
@@ -19,7 +22,7 @@ class AuctionEntityMapper {
             auction.getDetail().getContents(),
             auction.getDetail().getOpenDateTime(),
             auction.getDetail().getClosedDateTime(),
-            auction.getDetail().getMinimumBidAmount(),
+            auction.getDetail().getMinimumBidAmount().getAmount(),
             auction.getState(),
             Collections.emptyList()
         );
@@ -33,7 +36,7 @@ class AuctionEntityMapper {
                 createAuction.getContents(),
                 createAuction.getOpenDateTime(),
                 createAuction.getClosedDateTime(),
-                createAuction.getMinimumBidAmount()
+                new Money(createAuction.getMinimumBidAmount())
             ),
             AuctionState.WAITING,
             Collections.emptyList()
@@ -41,21 +44,23 @@ class AuctionEntityMapper {
     }
 
     Auction mapToDomain(AuctionEntity auctionEntity) {
-        return Auction.builder()
-            .sellerId(auctionEntity.getSellerId())
-            .detail(
-                mapToAuctionDetail(
-                    auctionEntity.getTitle(),
-                    auctionEntity.getContents(),
-                    auctionEntity.getOpenDateTime(),
-                    auctionEntity.getClosedDateTime(),
-                    auctionEntity.getMinimumBidAmount()
-                )
-            )
-            .state(auctionEntity.getState())
-            .comments(Collections.emptyList())
-            .build()
-            .setBaseEntity(auctionEntity.isDeleted(), auctionEntity.getId());
+        return new Auction(
+            auctionEntity.getSellerId(),
+            mapToAuctionDetail(
+                auctionEntity.getTitle(),
+                auctionEntity.getContents(),
+                auctionEntity.getOpenDateTime(),
+                auctionEntity.getClosedDateTime(),
+                new Money(auctionEntity.getMinimumBidAmount())
+            ),
+            auctionEntity.getState(),
+            auctionEntity.getComments().stream()
+                .map(
+                    it -> commentsEntityMapper.mapToDomain(it)
+                ).collect(Collectors.toList()),
+            auctionEntity.getId(),
+            auctionEntity.isDeleted()
+        );
     }
 
     AuctionDetail mapToAuctionDetail(
@@ -63,7 +68,7 @@ class AuctionEntityMapper {
         String contents,
         LocalDateTime openDateTime,
         LocalDateTime closedDateTime,
-        int minimumBidAmount
+        Money minimumBidAmount
     ){
         return new AuctionDetail(
             title,
@@ -73,6 +78,5 @@ class AuctionEntityMapper {
             minimumBidAmount
         );
     }
-
 
 }

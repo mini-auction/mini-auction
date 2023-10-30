@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class BaseEntity {
-    protected Boolean isDeleted;
-    protected String id;
+    private Boolean isDeleted;
+    private String id;
+
 }
