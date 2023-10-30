@@ -1,6 +1,5 @@
 package com.mini.auction.auction.domain;
 
-import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.common.domian.BaseEntity;
 import com.mini.auction.common.enums.AuctionState;
 import lombok.AllArgsConstructor;
@@ -26,7 +25,4 @@ public class Auction extends BaseEntity {
         return this;
     }
 
-    public void update(AuctionDetail detail){
-        this.detail = detail;
-    }
 }
