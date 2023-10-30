@@ -16,7 +16,7 @@ public class MemberNullCheckImpl implements MemberNullCheck {
     private final FindMemberPort findMemberPort;
 
     @Override
-    public void byExists(String id) {
+    public void existsById(String id) {
         if (!findMemberPort.existById(id)) {
             throw new BadRequestException(new ErrorResponse(ErrorCode.E10000));
         }
