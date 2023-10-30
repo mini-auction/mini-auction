@@ -3,6 +3,7 @@ package com.mini.auction.auction.adapter.out.persistence;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.auction.domain.Auction;
 import com.mini.auction.auction.domain.AuctionDetail;
+import com.mini.auction.auction.domain.Money;
 import com.mini.auction.common.enums.AuctionState;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ class AuctionEntityMapper {
             auction.getDetail().getContents(),
             auction.getDetail().getOpenDateTime(),
             auction.getDetail().getClosedDateTime(),
-            auction.getDetail().getMinimumBidAmount(),
+            auction.getDetail().getMinimumBidAmount().getAmount(),
             auction.getState()
         );
     }
@@ -31,7 +32,7 @@ class AuctionEntityMapper {
                 createAuction.getContents(),
                 createAuction.getOpenDateTime(),
                 createAuction.getClosedDateTime(),
-                createAuction.getMinimumBidAmount()
+                new Money(createAuction.getMinimumBidAmount())
             ),
             AuctionState.WAITING
         );
@@ -46,7 +47,7 @@ class AuctionEntityMapper {
                     auctionEntity.getContents(),
                     auctionEntity.getOpenDateTime(),
                     auctionEntity.getClosedDateTime(),
-                    auctionEntity.getMinimumBidAmount()
+                    new Money(auctionEntity.getMinimumBidAmount())
                 )
             )
             .state(auctionEntity.getState())
@@ -59,7 +60,7 @@ class AuctionEntityMapper {
         String contents,
         LocalDateTime openDateTime,
         LocalDateTime closedDateTime,
-        int minimumBidAmount
+        Money minimumBidAmount
     ){
         return new AuctionDetail(
             title,

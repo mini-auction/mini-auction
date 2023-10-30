@@ -6,8 +6,8 @@ import com.mini.auction.auction.application.port.out.AuctionNullCheck;
 import com.mini.auction.auction.application.port.out.AuctionPort;
 import com.mini.auction.auction.application.port.out.AuctionTermsMappingLogPort;
 import com.mini.auction.auction.application.port.out.TermsNullCheck;
-import com.mini.auction.common.exceptionHandler.ErrorCode;
-import com.mini.auction.common.exceptionHandler.ErrorResponse;
+import com.mini.auction.common.exceptionHandler.CustomResponse;
+import com.mini.auction.common.exceptionHandler.ExceptionCode;
 import com.mini.auction.common.exceptionHandler.customException.BadRequestException;
 import com.mini.auction.member.application.port.out.MemberNullCheck;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +32,11 @@ class AuctionServiceImpl implements AuctionService {
         termsNullCheck.existsById(req.getTermsId());
         //경매 약관 동의
         if (!req.getIsAgree()) {
-            throw new BadRequestException(new ErrorResponse(ErrorCode.E20001));
+            throw new BadRequestException(new CustomResponse(ExceptionCode.E20001));
         }
         //경매 시작일과 종료일이 동일한지 체크
         if (req.getOpenDateTime().equals(req.getClosedDateTime())){
-            throw new BadRequestException(new ErrorResponse(ErrorCode.E30001));
+            throw new BadRequestException(new CustomResponse(ExceptionCode.E30001));
         }
         //경매 생성
         String auctionId = auctionPort.save(req);

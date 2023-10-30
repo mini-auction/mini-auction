@@ -19,7 +19,7 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository{
             .set(auctionEntity.contents, detail.getContents())
             .set(auctionEntity.openDateTime, detail.getOpenDateTime())
             .set(auctionEntity.closedDateTime, detail.getClosedDateTime())
-            .set(auctionEntity.minimumBidAmount, detail.getMinimumBidAmount())
+            .set(auctionEntity.minimumBidAmount, detail.getMinimumBidAmount().getAmount())
             .set(auctionEntity.updateDateTime, LocalDateTime.now())
             .where(auctionEntity.id.eq(id))
             .execute();

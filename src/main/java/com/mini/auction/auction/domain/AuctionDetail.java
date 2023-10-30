@@ -19,5 +19,7 @@ public class AuctionDetail {
 
     private LocalDateTime closedDateTime;
 
-    private int minimumBidAmount = 0;
+    private Money minimumBidAmount;
+
+
 }
