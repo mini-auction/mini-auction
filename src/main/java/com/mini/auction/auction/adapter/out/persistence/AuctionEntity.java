@@ -19,15 +19,15 @@ import java.time.LocalDateTime;
 class AuctionEntity extends BaseJpaEntity {
 
     @Comment("판매자 id")
-    @Column(length = 100, nullable = false)
+    @Column(length = 15, nullable = false)
     private String sellerId;
 
     @Comment("제목")
-    @Column(length = 100, nullable = false)
+    @Column(nullable = false)
     private String title;
 
     @Comment("내용")
-    @Column(length = 100, nullable = false)
+    @Column(nullable = false)
     private String contents;
 
     @Comment("경매 오픈일")

@@ -1,4 +1,4 @@
-package com.mini.auction.auction.domain;
+package com.mini.auction.common.domian;
 
 import com.mini.auction.common.exceptionHandler.CustomResponse;
 import com.mini.auction.common.exceptionHandler.ExceptionCode;

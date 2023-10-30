@@ -3,7 +3,7 @@ package com.mini.auction.auction.adapter.out.persistence;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.auction.domain.Auction;
 import com.mini.auction.auction.domain.AuctionDetail;
-import com.mini.auction.auction.domain.Money;
+import com.mini.auction.common.domian.Money;
 import com.mini.auction.common.enums.AuctionState;
 import org.springframework.stereotype.Component;
 

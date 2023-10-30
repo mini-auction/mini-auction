@@ -7,7 +7,6 @@ public interface AuctionService {
 
     void createAuction(AuctionReq.CreateAuction req);
 
-    @Transactional
     void updateAuction(String id, AuctionReq req);
 
 }

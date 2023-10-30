@@ -4,7 +4,7 @@ import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.auction.application.port.out.AuctionPort;
 import com.mini.auction.auction.domain.Auction;
 import com.mini.auction.auction.domain.AuctionDetail;
-import com.mini.auction.auction.domain.Money;
+import com.mini.auction.common.domian.Money;
 import com.mini.auction.common.exceptionHandler.CustomResponse;
 import com.mini.auction.common.exceptionHandler.ExceptionCode;
 import com.mini.auction.common.exceptionHandler.customException.BadRequestException;

@@ -44,6 +44,7 @@ class AuctionServiceImpl implements AuctionService {
         auctionTermsMappingLogPort.save(auctionId, req.getTermsId());
     }
 
+    @Transactional
     @Override
     public void updateAuction(String id, AuctionReq req) {
         //TODO : 토큰에서 사용자 id 꺼낸 후 , 게시글쓴이가 맞는지 체크.
