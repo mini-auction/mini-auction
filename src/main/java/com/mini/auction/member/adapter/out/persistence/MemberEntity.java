@@ -28,7 +28,7 @@ class MemberEntity extends BaseEntity {
     private String password;
 
     @Comment("이메일")
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Comment("핸드폰 번호")
