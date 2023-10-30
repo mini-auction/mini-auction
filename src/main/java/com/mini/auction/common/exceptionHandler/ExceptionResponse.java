@@ -17,4 +17,5 @@ public class ExceptionResponse extends CustomResponse {
         super(exceptionCode);
         this.detail = value;
     }
+
 }

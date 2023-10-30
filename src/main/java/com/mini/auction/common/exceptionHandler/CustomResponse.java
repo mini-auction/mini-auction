@@ -17,4 +17,5 @@ public class CustomResponse {
         this.code = exceptionCode.name();
         this.message = exceptionCode.getMessage();
     }
+
 }
