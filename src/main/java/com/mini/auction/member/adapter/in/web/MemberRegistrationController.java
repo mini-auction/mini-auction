@@ -1,7 +1,8 @@
 package com.mini.auction.member.adapter.in.web;
 
+import com.mini.auction.member.adapter.in.web.dto.RegistrationInfoRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.mini.auction.member.application.port.in.MemberSignService;
 
 @RestController
@@ -9,5 +10,11 @@ import com.mini.auction.member.application.port.in.MemberSignService;
 class MemberRegistrationController {
 
     private final MemberSignService memberSignService;
+
+    @PostMapping("/registration")
+    void registrationMember(@RequestBody RegistrationInfoRequest registrationInfoRequest){
+
+
+    }
 
 }
