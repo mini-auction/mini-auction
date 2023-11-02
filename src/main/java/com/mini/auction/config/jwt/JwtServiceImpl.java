@@ -55,7 +55,7 @@ public class JwtServiceImpl implements JwtService{
     }
 
     @Override
-    public Map<String, Object> getClaims(String key) throws com.mini.auction.common.exceptionHandler.customException.JwtException {
+    public Map<String, Object> getClaims(String key) throws JwtException {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String jwt = request.getHeader("Authorization");
         Claims claims = null;
@@ -76,7 +76,7 @@ public class JwtServiceImpl implements JwtService{
     }
 
     @Override
-    public boolean isUsable(String token) throws com.mini.auction.common.exceptionHandler.customException.JwtException {
+    public boolean isUsable(String token) throws JwtException {
         try{
             Jwts.parserBuilder()
                     .setSigningKey(secretKey)
@@ -89,7 +89,7 @@ public class JwtServiceImpl implements JwtService{
         }
     }
 
-    public void jwtExceptionHandler(Exception e) throws com.mini.auction.common.exceptionHandler.customException.JwtException {
+    public void jwtExceptionHandler(Exception e) throws JwtException {
         if (e instanceof ExpiredJwtException exception){ // 토큰 만료
             ErrorResponse error = new ErrorResponse(ErrorCode.E00004, exception.getMessage());
             logger.error("ExpiredJwtException: ", exception);

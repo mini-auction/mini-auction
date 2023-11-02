@@ -1,8 +1,6 @@
 package com.mini.auction.member.domain;
 
-import jakarta.persistence.Column;
 import lombok.*;
-import org.hibernate.annotations.Comment;
 
 /*
     Entity 가 아님. 실제 DB 와 직접적인 연관이 없음.

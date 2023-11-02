@@ -1,7 +1,9 @@
 package com.mini.auction.member.adapter.in.web;
 
+import com.mini.auction.member.adapter.in.web.dto.LoginReq;
 import com.mini.auction.member.adapter.in.web.dto.RegistrationInfoReq;
 import com.mini.auction.member.application.port.in.AccountService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,4 +20,8 @@ class AccountController {
         accountService.createMember(req);
     }
 
+    @PostMapping("/login")
+    void login(@RequestBody @Valid LoginReq req, HttpServletResponse res){
+        accountService.login(req, res);
+    }
 }
