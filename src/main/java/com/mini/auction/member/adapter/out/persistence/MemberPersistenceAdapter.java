@@ -37,7 +37,7 @@ class MemberPersistenceAdapter implements AccountPort, FindMemberPort {
         try {
             memberRepository.save(register);
         } catch (DataIntegrityViolationException e) { // sql 오류나 입력된 data가 잘못된 경우 동작하는 exception
-            logger.error("error message: {}", e.getMessage());
+            logger.error("error {}", req, e);
             throw new BadRequestException(new CustomResponse(ExceptionCode.E10002));
         }
     }
