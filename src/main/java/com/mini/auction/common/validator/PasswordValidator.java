@@ -26,7 +26,12 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
             if (!isValidPassword) {
                 context.disableDefaultConstraintViolation();
                 context.buildConstraintViolationWithTemplate(
-                                MessageFormat.format("{0}자 이상의 {1}자 이하의 숫자, 영문자, 특수문자를 포함한 비밀번호를 입력해주세요", MIN_SIZE, MAX_SIZE))
+                                MessageFormat.format(
+                                        "{0}자 이상의 {1}자 이하의 숫자, 영문자, 특수문자를 포함한 비밀번호를 입력해주세요",
+                                        MIN_SIZE,
+                                        MAX_SIZE
+                                )
+                        )
                         .addConstraintViolation();
             }
             return isValidPassword;
