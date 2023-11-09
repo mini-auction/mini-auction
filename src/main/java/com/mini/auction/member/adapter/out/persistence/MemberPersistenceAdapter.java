@@ -2,7 +2,6 @@ package com.mini.auction.member.adapter.out.persistence;
 
 import com.mini.auction.common.exceptionHandler.CustomResponse;
 import com.mini.auction.common.exceptionHandler.ExceptionCode;
-import com.mini.auction.common.exceptionHandler.GlobalExceptionHandler;
 import com.mini.auction.common.exceptionHandler.customException.BadRequestException;
 import com.mini.auction.common.exceptionHandler.customException.NotFoundAuthException;
 import com.mini.auction.config.jwt.JwtToken;
@@ -25,7 +24,7 @@ class MemberPersistenceAdapter implements AccountPort, FindMemberPort {
     private final MemberRepository memberRepository;
     private final MemberEntityMapper memberEntityMapper;
 
-    private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(MemberPersistenceAdapter.class);
 
     @Override
     public boolean existById(String id) {
@@ -38,8 +37,7 @@ class MemberPersistenceAdapter implements AccountPort, FindMemberPort {
         try {
             memberRepository.save(register);
         } catch (DataIntegrityViolationException e) { // sql 오류나 입력된 data가 잘못된 경우 동작하는 exception
-            logger.info("error class: {}", e.getClass());
-            logger.info("error message: {}", e.getMessage());
+            logger.error("error message: {}", e.getMessage());
             throw new BadRequestException(new CustomResponse(ExceptionCode.E10002));
         }
     }
