@@ -1,10 +1,15 @@
 package com.mini.auction.auction.adapter.out.persistence.infrastructure;
 
+import com.mini.auction.auction.adapter.in.web.dto.AuctionRes;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionsRes;
+import com.mini.auction.auction.adapter.in.web.dto.CommentsInfo;
 import com.mini.auction.auction.adapter.out.persistence.QAuctionEntity;
 import com.mini.auction.auction.domain.AuctionDetail;
 import com.mini.auction.common.enums.AuctionState;
-import com.querydsl.core.types.*;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.mini.auction.auction.adapter.out.persistence.QAuctionEntity.auctionEntity;
+import static com.mini.auction.auction.adapter.out.persistence.QCommentsEntity.commentsEntity;
 import static com.mini.auction.member.adapter.out.persistence.QMemberEntity.memberEntity;
 
 @RequiredArgsConstructor
@@ -34,6 +40,50 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository{
             .set(auctionEntity.closedDateTime, detail.getClosedDateTime())
             .set(auctionEntity.minimumBidAmount, detail.getMinimumBidAmount().getAmount())
             .set(auctionEntity.updateDateTime, LocalDateTime.now())
+            .where(auctionEntity.id.eq(id))
+            .execute();
+    }
+
+    @Override
+    public AuctionRes getAuctionDetailById(String id) {
+        return jpaQueryFactory.select(
+            Projections.constructor(
+                AuctionRes.class,
+                auctionEntity.sellerId,
+                auctionEntity.createDateTime,
+                Projections.constructor(
+                    AuctionDetail.class,
+                    auctionEntity.title,
+                    auctionEntity.contents,
+                    auctionEntity.openDateTime,
+                    auctionEntity.closedDateTime,
+                    auctionEntity.minimumBidAmount
+                )
+            )
+        ).from(auctionEntity)
+            .where(auctionEntity.id.eq(id).and(auctionEntity.isDeleted.isFalse()))
+            .fetchOne();
+    }
+//
+    @Override
+    public List<CommentsInfo> getCommentsListByAuctionId(String auctionId){
+        return jpaQueryFactory.select(
+                Projections.constructor(
+                    CommentsInfo.class,
+                    commentsEntity.writer,
+                    commentsEntity.contents,
+                    commentsEntity.createDateTime
+                )
+            ).from(commentsEntity)
+            .where(commentsEntity.auction.id.eq(auctionId)
+                .and(commentsEntity.isDeleted.isFalse()))
+            .fetch();
+    }
+
+    @Override
+    public void updateIsDeletedById(String id, boolean state) {
+        jpaQueryFactory.update(auctionEntity)
+            .set(auctionEntity.isDeleted, state)
             .where(auctionEntity.id.eq(id))
             .execute();
     }

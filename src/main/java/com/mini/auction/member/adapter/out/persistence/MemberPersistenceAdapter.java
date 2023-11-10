@@ -27,8 +27,8 @@ class MemberPersistenceAdapter implements AccountPort, FindMemberPort {
     private final Logger logger = LoggerFactory.getLogger(MemberPersistenceAdapter.class);
 
     @Override
-    public boolean existById(String id) {
-        return memberRepository.existsById(id);
+    public boolean existsByIdAndIsDeletedFalse(String id) {
+        return memberRepository.existsByIdAndIsDeletedFalse(id);
     }
 
     @Override

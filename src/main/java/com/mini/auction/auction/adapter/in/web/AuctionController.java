@@ -1,5 +1,6 @@
 package com.mini.auction.auction.adapter.in.web;
 
+import com.mini.auction.auction.adapter.in.web.dto.AuctionRes;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionsRes;
 import com.mini.auction.auction.application.port.in.AuctionService;
@@ -29,6 +30,19 @@ class AuctionController {
         auctionService.updateAuction(id, req);
     }
 
+    @GetMapping("/{id}")
+    AuctionRes getAuctionDetail(
+        @PathVariable String id
+    ){
+        return auctionService.getAuctionDetail(id);
+    }
+
+    @DeleteMapping("/{id}")
+    void removeAuction(
+        @PathVariable String id
+    ){
+        auctionService.removeAuction(id);
+    }
     @GetMapping("/list/waiting")
     Page<AuctionsRes> getWaitingAuctionsPage(Pageable pageable){
         return auctionService.getWaitingAuctionsPage(pageable);

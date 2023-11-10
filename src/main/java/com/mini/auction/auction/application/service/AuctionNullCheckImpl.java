@@ -15,8 +15,8 @@ public class AuctionNullCheckImpl implements AuctionNullCheck {
     private final AuctionPort auctionPort;
 
     @Override
-    public void existsById(String id) {
-        if (!auctionPort.existById(id)){
+    public void existsByIdAndIsDeletedFalse(String id) {
+        if (!auctionPort.existsByIdAndIsDeletedFalse(id)){
             throw new BadRequestException(new CustomResponse(ExceptionCode.E00001));
         }
     }

@@ -4,4 +4,6 @@ import com.mini.auction.auction.adapter.out.persistence.infrastructure.TermsCust
 import org.springframework.data.jpa.repository.JpaRepository;
 
 interface TermsRepository extends JpaRepository<TermsEntity, String>, TermsCustomRepository {
+    boolean existsByIdAndIsDeletedFalse(String id);
+
 }
