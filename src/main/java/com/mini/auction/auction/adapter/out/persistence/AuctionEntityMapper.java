@@ -3,14 +3,17 @@ package com.mini.auction.auction.adapter.out.persistence;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.auction.domain.Auction;
 import com.mini.auction.auction.domain.AuctionDetail;
-import com.mini.auction.auction.domain.Money;
+import com.mini.auction.common.domian.Money;
 import com.mini.auction.common.enums.AuctionState;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Component
 class AuctionEntityMapper {
+    private CommentsEntityMapper commentsEntityMapper;
 
     AuctionEntity mapToEntity(Auction auction){
         return new AuctionEntity(
@@ -20,7 +23,8 @@ class AuctionEntityMapper {
             auction.getDetail().getOpenDateTime(),
             auction.getDetail().getClosedDateTime(),
             auction.getDetail().getMinimumBidAmount().getAmount(),
-            auction.getState()
+            auction.getState(),
+            Collections.emptyList()
         );
     }
 
@@ -34,25 +38,29 @@ class AuctionEntityMapper {
                 createAuction.getClosedDateTime(),
                 new Money(createAuction.getMinimumBidAmount())
             ),
-            AuctionState.WAITING
+            AuctionState.WAITING,
+            Collections.emptyList()
         );
     }
 
     Auction mapToDomain(AuctionEntity auctionEntity) {
-        return Auction.builder()
-            .sellerId(auctionEntity.getSellerId())
-            .detail(
-                mapToAuctionDetail(
-                    auctionEntity.getTitle(),
-                    auctionEntity.getContents(),
-                    auctionEntity.getOpenDateTime(),
-                    auctionEntity.getClosedDateTime(),
-                    new Money(auctionEntity.getMinimumBidAmount())
-                )
-            )
-            .state(auctionEntity.getState())
-            .build()
-            .setBaseEntity(auctionEntity.isDeleted(), auctionEntity.getId());
+        return new Auction(
+            auctionEntity.getSellerId(),
+            mapToAuctionDetail(
+                auctionEntity.getTitle(),
+                auctionEntity.getContents(),
+                auctionEntity.getOpenDateTime(),
+                auctionEntity.getClosedDateTime(),
+                new Money(auctionEntity.getMinimumBidAmount())
+            ),
+            auctionEntity.getState(),
+            auctionEntity.getComments().stream()
+                .map(
+                    comments -> commentsEntityMapper.mapToDomain(comments)
+                ).collect(Collectors.toList()),
+            auctionEntity.getId(),
+            auctionEntity.isDeleted()
+        );
     }
 
     AuctionDetail mapToAuctionDetail(
@@ -70,6 +78,5 @@ class AuctionEntityMapper {
             minimumBidAmount
         );
     }
-
 
 }

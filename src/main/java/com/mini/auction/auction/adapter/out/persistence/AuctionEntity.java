@@ -3,16 +3,17 @@ package com.mini.auction.auction.adapter.out.persistence;
 import com.mini.auction.common.domian.BaseJpaEntity;
 import com.mini.auction.common.enums.AuctionState;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 @Entity
 @Table(name = "auction")
@@ -47,6 +48,9 @@ class AuctionEntity extends BaseJpaEntity {
     @Enumerated(EnumType.STRING)
     private AuctionState state = AuctionState.WAITING;
 
-
+    @Comment("댓글")
+    @Column(name = "comments_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "auction")
+    private List<CommentsEntity> comments = new ArrayList<CommentsEntity>();
 
 }

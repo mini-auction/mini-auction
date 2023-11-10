@@ -15,8 +15,8 @@ public class TermsNullCheckImpl implements TermsNullCheck {
     private final FindTermsPort findTermsPort;
 
     @Override
-    public void existsById(String id) {
-        if (!findTermsPort.existById(id)){
+    public void existsByIdAndIsDeletedFalse(String id) {
+        if (!findTermsPort.existsByIdAndIsDeletedFalse(id)){
             throw new BadRequestException(new CustomResponse(ExceptionCode.E20000));
         }
     }

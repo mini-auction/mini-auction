@@ -1,5 +1,6 @@
 package com.mini.auction.auction.application.service;
 
+import com.mini.auction.auction.adapter.in.web.dto.AuctionRes;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.auction.application.port.in.AuctionService;
 import com.mini.auction.auction.application.port.out.AuctionNullCheck;
@@ -27,9 +28,9 @@ class AuctionServiceImpl implements AuctionService {
     @Override
     public void createAuction(AuctionReq.CreateAuction req) {
         //sellerId 체크 //TODO : 토큰에서 꺼내오기.
-        memberNullCheck.existsById(req.getSellerId());
+        memberNullCheck.existsByIdAndIsDeletedFalse(req.getSellerId());
         //termsId 체크
-        termsNullCheck.existsById(req.getTermsId());
+        termsNullCheck.existsByIdAndIsDeletedFalse(req.getTermsId());
         //경매 약관 동의
         if (!req.getIsAgree()) {
             throw new BadRequestException(new CustomResponse(ExceptionCode.E20001));
@@ -44,11 +45,29 @@ class AuctionServiceImpl implements AuctionService {
         auctionTermsMappingLogPort.save(auctionId, req.getTermsId());
     }
 
+    @Transactional
     @Override
     public void updateAuction(String id, AuctionReq req) {
         //TODO : 토큰에서 사용자 id 꺼낸 후 , 게시글쓴이가 맞는지 체크.
-        auctionNullCheck.existsById(id);
+        auctionNullCheck.existsByIdAndIsDeletedFalse(id);
         auctionPort.updateDetailById(id, req);
+    }
+
+    @Override
+    public AuctionRes getAuctionDetail(String id) {
+        AuctionRes detailRes = auctionPort.getAuctionDetailById(id);
+        if (detailRes == null){
+            throw new BadRequestException(new CustomResponse(ExceptionCode.E30000));
+        }
+        detailRes.setCommentsList(auctionPort.getCommentsListByAuctionId(id));
+        return detailRes;
+    }
+
+    @Override
+    @Transactional
+    public void removeAuction(String id) {
+        auctionNullCheck.existsByIdAndIsDeletedFalse(id);
+        auctionPort.updateIsDeletedById(id, true);
     }
 
 }
