@@ -1,15 +1,21 @@
 package com.mini.auction.auction.adapter.out.persistence;
 
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
+import com.mini.auction.auction.adapter.in.web.dto.AuctionsRes;
 import com.mini.auction.auction.application.port.out.AuctionPort;
 import com.mini.auction.auction.domain.Auction;
 import com.mini.auction.auction.domain.AuctionDetail;
 import com.mini.auction.auction.domain.Money;
+import com.mini.auction.common.enums.AuctionState;
 import com.mini.auction.common.exceptionHandler.CustomResponse;
 import com.mini.auction.common.exceptionHandler.ExceptionCode;
 import com.mini.auction.common.exceptionHandler.customException.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -47,5 +53,15 @@ class AuctionPersistenceAdapter implements AuctionPort {
         return auctionEntityMapper.mapToDomain(auctionEntity);
     }
 
+
+    @Override
+    public Page<AuctionsRes> findAllByStateIsWaitingPage(AuctionState WAITING, Pageable pageable) {
+        return auctionRepository.findAllByStateIsWaitingPage(WAITING, pageable);
+    }
+
+    @Override
+    public List<AuctionsRes> findAllByStateIsWaitingList(AuctionState WAITING, Pageable pageable) {
+        return auctionRepository.findAllByStateIsWaitingList(WAITING, pageable);
+    }
 
 }
