@@ -1,6 +1,6 @@
 package com.mini.auction.auction.application.service;
 
-import com.mini.auction.auction.adapter.in.web.dto.AuctionDetailRes;
+import com.mini.auction.auction.adapter.in.web.dto.AuctionRes;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.auction.application.port.in.AuctionService;
 import com.mini.auction.auction.application.port.out.AuctionNullCheck;
@@ -54,8 +54,8 @@ class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public AuctionDetailRes getAuctionDetail(String id) {
-        AuctionDetailRes detailRes = auctionPort.getAuctionDetailById(id);
+    public AuctionRes getAuctionDetail(String id) {
+        AuctionRes detailRes = auctionPort.getAuctionDetailById(id);
         if (detailRes == null){
             throw new BadRequestException(new CustomResponse(ExceptionCode.E30000));
         }

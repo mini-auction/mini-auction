@@ -1,6 +1,6 @@
 package com.mini.auction.auction.application.port.out;
 
-import com.mini.auction.auction.adapter.in.web.dto.AuctionDetailRes;
+import com.mini.auction.auction.adapter.in.web.dto.AuctionRes;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.auction.adapter.in.web.dto.CommentsInfo;
 import com.mini.auction.auction.domain.Auction;
@@ -16,7 +16,7 @@ public interface AuctionPort {
 
     Auction findById(String id);
 
-    AuctionDetailRes getAuctionDetailById(String id);
+    AuctionRes getAuctionDetailById(String id);
 
     List<CommentsInfo> getCommentsListByAuctionId(String auctionId);
 

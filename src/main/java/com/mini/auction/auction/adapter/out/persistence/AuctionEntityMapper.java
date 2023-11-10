@@ -56,7 +56,7 @@ class AuctionEntityMapper {
             auctionEntity.getState(),
             auctionEntity.getComments().stream()
                 .map(
-                    it -> commentsEntityMapper.mapToDomain(it)
+                    comments -> commentsEntityMapper.mapToDomain(comments)
                 ).collect(Collectors.toList()),
             auctionEntity.getId(),
             auctionEntity.isDeleted()

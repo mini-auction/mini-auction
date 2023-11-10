@@ -1,6 +1,6 @@
 package com.mini.auction.auction.adapter.out.persistence.infrastructure;
 
-import com.mini.auction.auction.adapter.in.web.dto.AuctionDetailRes;
+import com.mini.auction.auction.adapter.in.web.dto.AuctionRes;
 import com.mini.auction.auction.adapter.in.web.dto.CommentsInfo;
 import com.mini.auction.auction.adapter.out.persistence.QAuctionEntity;
 import com.mini.auction.auction.domain.AuctionDetail;
@@ -32,10 +32,10 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository{
     }
 
     @Override
-    public AuctionDetailRes getAuctionDetailById(String id) {
+    public AuctionRes getAuctionDetailById(String id) {
         return jpaQueryFactory.select(
             Projections.constructor(
-                AuctionDetailRes.class,
+                AuctionRes.class,
                 auctionEntity.sellerId,
                 auctionEntity.createDateTime,
                 Projections.constructor(

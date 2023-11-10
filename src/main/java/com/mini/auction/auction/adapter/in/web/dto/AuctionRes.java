@@ -9,13 +9,13 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class AuctionDetailRes {
+public class AuctionRes {
     private String sellerId;
     private LocalDateTime createDateTime;
     private AuctionDetail detail;
     private List<CommentsInfo> commentsList;
 
-    public AuctionDetailRes(
+    public AuctionRes(
         String sellerId,
         LocalDateTime createDateTime,
         AuctionDetail detail

@@ -1,6 +1,6 @@
 package com.mini.auction.auction.adapter.in.web;
 
-import com.mini.auction.auction.adapter.in.web.dto.AuctionDetailRes;
+import com.mini.auction.auction.adapter.in.web.dto.AuctionRes;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 import com.mini.auction.auction.application.port.in.AuctionService;
 import jakarta.validation.Valid;
@@ -27,14 +27,14 @@ class AuctionController {
         auctionService.updateAuction(id, req);
     }
 
-    @GetMapping("{id}")
-    AuctionDetailRes getAuctionDetail(
+    @GetMapping("/{id}")
+    AuctionRes getAuctionDetail(
         @PathVariable String id
     ){
         return auctionService.getAuctionDetail(id);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     void removeAuction(
         @PathVariable String id
     ){

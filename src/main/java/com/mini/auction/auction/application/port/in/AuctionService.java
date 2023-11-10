@@ -1,6 +1,6 @@
 package com.mini.auction.auction.application.port.in;
 
-import com.mini.auction.auction.adapter.in.web.dto.AuctionDetailRes;
+import com.mini.auction.auction.adapter.in.web.dto.AuctionRes;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
 
 public interface AuctionService {
@@ -9,7 +9,7 @@ public interface AuctionService {
 
     void updateAuction(String id, AuctionReq req);
 
-    AuctionDetailRes getAuctionDetail(String id);
+    AuctionRes getAuctionDetail(String id);
 
     void removeAuction(String id);
 
