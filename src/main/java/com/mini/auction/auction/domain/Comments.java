@@ -1,12 +1,11 @@
 package com.mini.auction.auction.domain;
 
 
-import com.mini.auction.common.domian.BaseEntity;
+import com.mini.auction.common.domian.BaseDomainEntity;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-public class Comments extends BaseEntity {
+public class Comments extends BaseDomainEntity {
     private String contents;
 
     private String writerId;

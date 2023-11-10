@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class BaseEntity {
+public abstract class BaseDomainEntity {
     private Boolean isDeleted;
     private String id;
 
