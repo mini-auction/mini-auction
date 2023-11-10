@@ -15,6 +15,6 @@ public abstract class BaseJpaEntity extends Timestamped {
 
     @Id
     @Column(length = 15)
-    private final String id = Utils.customUUID();;
+    private final String id = Utils.customUUID();
 
 }

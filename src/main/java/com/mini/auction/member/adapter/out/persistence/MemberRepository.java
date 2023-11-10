@@ -4,6 +4,8 @@ import com.mini.auction.member.adapter.out.persistence.infrastructure.MemberCust
 import org.springframework.data.jpa.repository.JpaRepository;
 
 interface MemberRepository extends JpaRepository<MemberEntity, String>, MemberCustomRepository {
+    boolean existsByEmail(String email);
+
     boolean existsByIdAndIsDeletedFalse(String id);
 
 }

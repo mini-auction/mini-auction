@@ -42,7 +42,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public <T> String create(Object memberInfo) {
+    public <T> String create(JwtToken memberInfo) {
         return Jwts.builder()
             .signWith(secretKey)
             .setSubject("member")
