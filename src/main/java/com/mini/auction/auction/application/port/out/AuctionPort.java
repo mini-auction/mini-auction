@@ -18,8 +18,6 @@ public interface AuctionPort {
 
     Auction findById(String id);
 
-
     Page<AuctionsRes> findAllByStateIsWaitingPage(AuctionState WAITING, Pageable pageable);
 
-    List<AuctionsRes> findAllByStateIsWaitingList(AuctionState waiting, Pageable pageable);
 }

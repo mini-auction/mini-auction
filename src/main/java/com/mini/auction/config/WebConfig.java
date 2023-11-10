@@ -15,8 +15,8 @@ public class WebConfig implements WebMvcConfigurer{
             /*
              *  TODO: 토큰이 필요하지 않은 uri에 대해서만 예외처리 필요함
              */
-//            "/account/**",
-            "/**"
+            "/account/**",
+            "/auction/list/**"
     };
 
     private final JwtInterceptor jwtInterceptor;

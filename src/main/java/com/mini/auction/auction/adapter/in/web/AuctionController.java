@@ -7,11 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/auction")
@@ -33,22 +29,9 @@ class AuctionController {
         auctionService.updateAuction(id, req);
     }
 
-    @GetMapping("/waiting/page")
-    Page<AuctionsRes> getWaitingAuctionsPage(
-            @PageableDefault(
-                    sort = "createDateTime", direction = Sort.Direction.DESC
-            ) Pageable pageable){
-        System.out.println("페이지: " + pageable.getPageSize());
+    @GetMapping("/list/waiting")
+    Page<AuctionsRes> getWaitingAuctionsPage(Pageable pageable){
         return auctionService.getWaitingAuctionsPage(pageable);
-    }
-
-    @GetMapping("/waiting/list")
-    List<AuctionsRes> getWaitingAuctionsList(
-            @PageableDefault(
-                    sort = "createDateTime", direction = Sort.Direction.DESC
-            ) Pageable pageable){
-        System.out.println("페이지: " + pageable.getPageSize());
-        return auctionService.getWaitingAuctionsList(pageable);
     }
 
 }

@@ -39,30 +39,6 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository{
     }
 
     @Override
-    public List<AuctionsRes> findAllByStateIsWaitingList(AuctionState WAITING, Pageable pageable) {
-         return jpaQueryFactory.select(
-                Projections.constructor(
-                        AuctionsRes.class,
-                        auctionEntity.id.as("auctionId"),
-                        ExpressionUtils.as(
-                                JPAExpressions.select(memberEntity.name)
-                                        .from(memberEntity)
-                                        .where(memberEntity.id.eq(auctionEntity.sellerId)),
-                                "sellerName"
-                        ),
-                        auctionEntity.title,
-                        auctionEntity.openDateTime,
-                        auctionEntity.closedDateTime
-                )
-        ).from(auctionEntity)
-                .where(auctionEntity.state.eq(WAITING))
-                .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-    }
-
-    @Override
     public Page<AuctionsRes> findAllByStateIsWaitingPage(AuctionState WAITING, Pageable pageable) {
         List<AuctionsRes> fetch = jpaQueryFactory.select(
                         Projections.constructor(
@@ -85,7 +61,7 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository{
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        var count = jpaQueryFactory.select(auctionEntity.count())
+        Long count = jpaQueryFactory.select(auctionEntity.count())
                 .from(auctionEntity)
                 .where(auctionEntity.state.eq(WAITING))
                 .fetchOne();
@@ -95,14 +71,18 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository{
 
 
     // Pageable에서 다중 sort를 동적으로 구현하기 위한 메서드
-    private List<OrderSpecifier> getOrderSpecifier(Sort sort){
+    private List<OrderSpecifier> getOrderSpecifier(Sort sort) {
         List<OrderSpecifier> orderSpecifiers = new ArrayList<>();
-        sort.stream().forEach(order -> {
-            Order direction = order.isAscending()? Order.ASC : Order.DESC;
-            String prop = order.getProperty();
-            PathBuilder<?> orderByExpression = new PathBuilder(QAuctionEntity.class, "auctionEntity");
-            orderSpecifiers.add(new OrderSpecifier(direction,orderByExpression.get(prop)));
-        });
+        PathBuilder<?> orderByExpression = new PathBuilder(QAuctionEntity.class, "auctionEntity");
+        if (sort.isEmpty()) {
+            orderSpecifiers.add(new OrderSpecifier(Order.DESC, orderByExpression.get("createDateTime")));
+        } else {
+            sort.stream().forEach(order -> {
+                Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+                String prop = order.getProperty();
+                orderSpecifiers.add(new OrderSpecifier(direction, orderByExpression.get(prop)));
+            });
+        }
         return orderSpecifiers;
     }
 }

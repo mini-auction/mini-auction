@@ -6,8 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 public interface AuctionService {
 
     void createAuction(AuctionReq.CreateAuction req);
@@ -17,5 +15,4 @@ public interface AuctionService {
 
     Page<AuctionsRes> getWaitingAuctionsPage(Pageable pageable);
 
-    List<AuctionsRes> getWaitingAuctionsList(Pageable pageable);
 }

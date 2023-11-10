@@ -9,10 +9,14 @@ import org.springframework.data.web.config.PageableHandlerMethodArgumentResolver
 public class CustomPageableConfiguration {
 
     public static final int PAGE_NUMBER = 0;
-    public static final int PAGE_SIZE = 3;
+    public static final int PAGE_SIZE = 30;
+    public static final int MAX_PGE_SIZE = 30;
 
     @Bean
-    public PageableHandlerMethodArgumentResolverCustomizer customize() {
-        return p -> p.setFallbackPageable(PageRequest.of(PAGE_NUMBER, PAGE_SIZE));
+    public PageableHandlerMethodArgumentResolverCustomizer customizePageable() {
+        return p -> {
+            p.setFallbackPageable(PageRequest.of(PAGE_NUMBER, PAGE_SIZE));
+            p.setMaxPageSize(MAX_PGE_SIZE);
+        };
     }
 }

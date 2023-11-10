@@ -6,13 +6,9 @@ import com.mini.auction.common.enums.AuctionState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface AuctionCustomRepository {
 
     void updateDetail(String id, AuctionDetail detail);
-
-    List<AuctionsRes> findAllByStateIsWaitingList(AuctionState WAITING, Pageable pageable);
 
     Page<AuctionsRes> findAllByStateIsWaitingPage(AuctionState waiting, Pageable pageable);
 }
