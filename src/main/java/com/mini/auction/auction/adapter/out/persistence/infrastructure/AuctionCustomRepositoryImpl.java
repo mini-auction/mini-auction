@@ -7,13 +7,13 @@ import com.mini.auction.auction.adapter.in.web.dto.CommentsInfo;
 import com.mini.auction.auction.adapter.out.persistence.QAuctionEntity;
 import com.mini.auction.auction.domain.AuctionDetail;
 import com.mini.auction.common.enums.AuctionState;
-import com.querydsl.core.types.ExpressionUtils;
+import com.mysql.cj.util.StringUtils;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.PathBuilder;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -101,13 +101,7 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
                 Projections.constructor(
                     AuctionsRes.class,
                     auctionEntity.id.as("auctionId"),
-                    // TODO: subquery와 join 성능 비교
-                    ExpressionUtils.as(
-                        JPAExpressions.select(memberEntity.name)
-                            .from(memberEntity)
-                            .where(memberEntity.id.eq(auctionEntity.sellerId)),
-                        "sellerName"
-                    ),
+                    memberEntity.name.as("sellerName"),
                     auctionEntity.title,
                     auctionEntity.openDateTime,
                     auctionEntity.closedDateTime,
@@ -115,13 +109,16 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
                     auctionEntity.minimumBidAmount
                 )
             ).from(auctionEntity)
-            .join(memberEntity).on(auctionEntity.sellerId.eq(memberEntity.id))
+            .leftJoin(memberEntity).on(auctionEntity.sellerId.eq(memberEntity.id))
             .where(auctionEntity.state.eq(AuctionState.WAITING)
                 .and(auctionEntity.isDeleted.isFalse())
                 .and(minOpenDateGoe(auctionsReq.getMinOpenDate()))
                 .and(maxOpenDateLt(auctionsReq.getMaxOpenDate()))
                 .and(minBidAmountGoe(auctionsReq.getMinBidAmount()))
                 .and(maxBidAmountLoe(auctionsReq.getMaxBidAmount()))
+                .and(containTitleKeyword(auctionsReq.getTitleKeyword()))
+                .and(sellerKeywordEq(auctionsReq.getSellerKeyword()))
+                .and(searchTitleAndSellerKeyword(auctionsReq.getTitleAndSellerKeyword()))
             )
             .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
             .offset(pageable.getOffset())
@@ -130,12 +127,16 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
 
         long count = jpaQueryFactory.select(auctionEntity.count())
             .from(auctionEntity)
+            .leftJoin(memberEntity).on(auctionEntity.sellerId.eq(memberEntity.id))
             .where(auctionEntity.state.eq(AuctionState.WAITING)
                 .and(auctionEntity.isDeleted.isFalse())
                 .and(minOpenDateGoe(auctionsReq.getMinOpenDate()))
                 .and(maxOpenDateLt(auctionsReq.getMaxOpenDate()))
                 .and(minBidAmountGoe(auctionsReq.getMinBidAmount()))
                 .and(maxBidAmountLoe(auctionsReq.getMaxBidAmount()))
+                .and(containTitleKeyword(auctionsReq.getTitleKeyword()))
+                .and(sellerKeywordEq(auctionsReq.getSellerKeyword()))
+                .and(searchTitleAndSellerKeyword(auctionsReq.getTitleAndSellerKeyword()))
             )
             .fetchFirst();
 
@@ -175,4 +176,30 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
         return maxBidAmount != null ? auctionEntity.minimumBidAmount.loe(maxBidAmount) : null;
     }
 
+    private BooleanExpression containTitleKeyword(String titleKeyword){
+        if(StringUtils.isNullOrEmpty(titleKeyword)) {
+            return null;
+        }
+        BooleanExpression result = Expressions.asBoolean(true).isFalse();
+        String[] splitKeyword = titleKeyword.trim().split(" ");
+        for (String keyword : splitKeyword) {
+            result = result.or(auctionEntity.title.contains(keyword));
+        }
+        return result;
+    }
+
+    private BooleanExpression sellerKeywordEq(String sellerKeyword){
+        if(StringUtils.isNullOrEmpty(sellerKeyword)) {
+            return null;
+        }
+        return memberEntity.name.eq(sellerKeyword);
+    }
+
+    private BooleanExpression searchTitleAndSellerKeyword(String titleAndSellerKeyword){
+        if(StringUtils.isNullOrEmpty(titleAndSellerKeyword) ) {
+            return null;
+        }
+        BooleanExpression result = Expressions.asBoolean(true).isFalse();
+        return result.or(containTitleKeyword(titleAndSellerKeyword)).or(sellerKeywordEq(titleAndSellerKeyword));
+    }
 }

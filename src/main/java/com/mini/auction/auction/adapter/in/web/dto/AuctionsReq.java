@@ -20,5 +20,11 @@ public class AuctionsReq {
 
     private Integer maxBidAmount;
 
+    private String titleKeyword;
+
+    private String sellerKeyword;
+
+    private String titleAndSellerKeyword;
+
 
 }
