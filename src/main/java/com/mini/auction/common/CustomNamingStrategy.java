@@ -1,16 +1,16 @@
 package com.mini.auction.common;
 
+import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.boot.model.naming.Identifier;
-import org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 
-public class CustomNamingStrategy extends PhysicalNamingStrategyStandardImpl {
+public class CustomNamingStrategy extends CamelCaseToUnderscoresNamingStrategy {
 
     @Override
-    public Identifier toPhysicalTableName(Identifier logicalName, JdbcEnvironment context) {
+    public Identifier toPhysicalTableName(Identifier logicalName, JdbcEnvironment jdbcEnvironment) {
         String originalText = logicalName.getText();
         String customText = originalText.substring(0, originalText.length() - 6);
         System.out.println("check table naming : " + customText);
-        return new Identifier(customText, logicalName.isQuoted());
+        return super.toPhysicalTableName(new Identifier(customText, logicalName.isQuoted()), jdbcEnvironment);
     }
 }
