@@ -11,6 +11,7 @@ import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -113,9 +115,12 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
                     auctionEntity.minimumBidAmount
                 )
             ).from(auctionEntity)
-            .where(auctionEntity.state.eq(AuctionState.WAITING).and(auctionEntity.isDeleted.isFalse())
-                .and(auctionEntity.openDateTime.goe(auctionsReq.getMinOpenDate().atStartOfDay()))
-                .and(auctionEntity.openDateTime.loe(auctionsReq.getMaxOpenDate().atTime(LocalTime.MAX))))
+            .join(memberEntity).on(auctionEntity.sellerId.eq(memberEntity.id))
+            .where(auctionEntity.state.eq(AuctionState.WAITING)
+                .and(auctionEntity.isDeleted.isFalse())
+                .and(minOpenDateGoe(auctionsReq.getMinOpenDate()))
+                .and(maxOpenDateLt(auctionsReq.getMaxOpenDate()))
+            )
             .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -123,9 +128,11 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
 
         long count = jpaQueryFactory.select(auctionEntity.count())
             .from(auctionEntity)
-            .where(auctionEntity.state.eq(AuctionState.WAITING).and(auctionEntity.isDeleted.isFalse())
-                .and(auctionEntity.openDateTime.goe(auctionsReq.getMinOpenDate().atStartOfDay()))
-                .and(auctionEntity.openDateTime.loe(auctionsReq.getMaxOpenDate().atTime(LocalTime.MAX))))
+            .where(auctionEntity.state.eq(AuctionState.WAITING)
+                .and(auctionEntity.isDeleted.isFalse())
+                .and(minOpenDateGoe(auctionsReq.getMinOpenDate()))
+                .and(maxOpenDateLt(auctionsReq.getMaxOpenDate()))
+            )
             .fetchFirst();
 
         return PageableExecutionUtils.getPage(fetch, pageable, () -> count);
@@ -147,4 +154,13 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
         }
         return orderSpecifiers;
     }
+
+    private BooleanExpression minOpenDateGoe(LocalDate minOpenDate){
+        return minOpenDate != null ? auctionEntity.openDateTime.goe(minOpenDate.atTime(LocalTime.MIN)) : null;
+    }
+
+    private BooleanExpression maxOpenDateLt(LocalDate maxOpenDate){
+        return maxOpenDate != null ? auctionEntity.openDateTime.lt(maxOpenDate.plusDays(1).atTime(LocalTime.MIN)) : null;
+    }
+
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
 @RequestMapping("/auction")
@@ -53,13 +54,6 @@ class AuctionController {
         Pageable pageable,
         @RequestBody @Valid AuctionsReq auctionsReq
     ){
-
-        System.out.println("getMinOpenDate: " + auctionsReq.getMinOpenDate());
-        System.out.println("getMinOpenDate 시작 시간: " + auctionsReq.getMinOpenDate().atStartOfDay());
-
-        System.out.println("getMaxOpenDate: " + auctionsReq.getMaxOpenDate());
-        System.out.println("getMaxOpenDate 마지막 시간: " + auctionsReq.getMaxOpenDate().atTime(LocalTime.MAX));
-
         return auctionService.getWaitingAuctionsPage(pageable, auctionsReq);
     }
 
