@@ -5,8 +5,10 @@ import com.mini.auction.auction.adapter.in.web.dto.AuctionsReq;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionsRes;
 import com.mini.auction.auction.adapter.in.web.dto.CommentsInfo;
 import com.mini.auction.auction.adapter.out.persistence.QAuctionEntity;
+import com.mini.auction.auction.application.port.in.AuctionService;
 import com.mini.auction.auction.domain.AuctionDetail;
 import com.mini.auction.common.enums.AuctionState;
+import com.mini.auction.member.adapter.out.persistence.QMemberEntity;
 import com.mysql.cj.util.StringUtils;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -21,9 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +95,7 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
     }
 
     @Override
-    public Page<AuctionsRes> getAuctionListByStateIsWaiting(Pageable pageable, AuctionsReq auctionsReq) {
+    public Page<AuctionsRes> getAuctionListByStateIsWaiting(Pageable pageable, AuctionsReq auctionsReq, AuctionService.Param dateTimeParam) {
         List<AuctionsRes> fetch = jpaQueryFactory
             .select(
                 Projections.constructor(
@@ -109,15 +109,16 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
                     auctionEntity.minimumBidAmount
                 )
             ).from(auctionEntity)
+            // TODO: indexing 이후에 leftJoin, innerJoin 성능 비교
             .leftJoin(memberEntity).on(auctionEntity.sellerId.eq(memberEntity.id))
             .where(auctionEntity.state.eq(AuctionState.WAITING)
                 .and(auctionEntity.isDeleted.isFalse())
-                .and(minOpenDateGoe(auctionsReq.getMinOpenDate()))
-                .and(maxOpenDateLt(auctionsReq.getMaxOpenDate()))
+                .and(minOpenDateGoe(dateTimeParam.minOpenDateTime()))
+                .and(maxOpenDateLt(dateTimeParam.maxOpenDatetime()))
                 .and(minBidAmountGoe(auctionsReq.getMinBidAmount()))
                 .and(maxBidAmountLoe(auctionsReq.getMaxBidAmount()))
                 .and(containTitleKeyword(auctionsReq.getTitleKeyword()))
-                .and(sellerKeywordEq(auctionsReq.getSellerKeyword()))
+                .and(containSellerKeyword(auctionsReq.getSellerKeyword()))
                 .and(searchTitleAndSellerKeyword(auctionsReq.getTitleAndSellerKeyword()))
             )
             .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
@@ -130,12 +131,12 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
             .leftJoin(memberEntity).on(auctionEntity.sellerId.eq(memberEntity.id))
             .where(auctionEntity.state.eq(AuctionState.WAITING)
                 .and(auctionEntity.isDeleted.isFalse())
-                .and(minOpenDateGoe(auctionsReq.getMinOpenDate()))
-                .and(maxOpenDateLt(auctionsReq.getMaxOpenDate()))
+                .and(minOpenDateGoe(dateTimeParam.minOpenDateTime()))
+                .and(maxOpenDateLt(dateTimeParam.maxOpenDatetime()))
                 .and(minBidAmountGoe(auctionsReq.getMinBidAmount()))
                 .and(maxBidAmountLoe(auctionsReq.getMaxBidAmount()))
                 .and(containTitleKeyword(auctionsReq.getTitleKeyword()))
-                .and(sellerKeywordEq(auctionsReq.getSellerKeyword()))
+                .and(containSellerKeyword(auctionsReq.getSellerKeyword()))
                 .and(searchTitleAndSellerKeyword(auctionsReq.getTitleAndSellerKeyword()))
             )
             .fetchFirst();
@@ -151,21 +152,29 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
         if (sort.isEmpty()) {
             orderSpecifiers.add(new OrderSpecifier(Order.DESC, orderByExpression.get("createDateTime")));
         } else {
-            sort.stream().forEach(order -> {
-                Order direction = order.isAscending() ? Order.ASC : Order.DESC;
-                String prop = order.getProperty();
-                orderSpecifiers.add(new OrderSpecifier(direction, orderByExpression.get(prop)));
-            });
+            orderSpecifiers.addAll(sort.stream()
+                .map(order -> buildOrderSpecifier(order, orderByExpression)).toList());
         }
         return orderSpecifiers;
     }
 
-    private BooleanExpression minOpenDateGoe(LocalDate minOpenDate){
-        return minOpenDate != null ? auctionEntity.openDateTime.goe(minOpenDate.atTime(LocalTime.MIN)) : null;
+    private OrderSpecifier buildOrderSpecifier(Sort.Order order, PathBuilder<?> orderByExpression) {
+        String prop = order.getProperty();
+        Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+
+        if ("sellerName".equals(prop)) {
+            prop = "name";
+            orderByExpression = new PathBuilder<>(QMemberEntity.class, "memberEntity");
+        }
+        return new OrderSpecifier(direction, orderByExpression.get(prop));
     }
 
-    private BooleanExpression maxOpenDateLt(LocalDate maxOpenDate){
-        return maxOpenDate != null ? auctionEntity.openDateTime.lt(maxOpenDate.plusDays(1).atTime(LocalTime.MIN)) : null;
+    private BooleanExpression minOpenDateGoe(LocalDateTime minOpenDateTime){
+        return minOpenDateTime != null ? auctionEntity.openDateTime.goe(minOpenDateTime) : null;
+    }
+
+    private BooleanExpression maxOpenDateLt(LocalDateTime maxOpenDateTime){
+        return maxOpenDateTime != null ? auctionEntity.openDateTime.lt(maxOpenDateTime) : null;
     }
 
     private BooleanExpression minBidAmountGoe(Integer minBidAmount){
@@ -188,11 +197,16 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
         return result;
     }
 
-    private BooleanExpression sellerKeywordEq(String sellerKeyword){
+    private BooleanExpression containSellerKeyword(String sellerKeyword){
         if(StringUtils.isNullOrEmpty(sellerKeyword)) {
             return null;
         }
-        return memberEntity.name.eq(sellerKeyword);
+        BooleanExpression result = Expressions.asBoolean(true).isFalse();
+        String[] splitKeyword = sellerKeyword.trim().split(" ");
+        for (String keyword : splitKeyword) {
+            result = result.or(memberEntity.name.contains(keyword));
+        }
+        return result;
     }
 
     private BooleanExpression searchTitleAndSellerKeyword(String titleAndSellerKeyword){
@@ -200,6 +214,6 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
             return null;
         }
         BooleanExpression result = Expressions.asBoolean(true).isFalse();
-        return result.or(containTitleKeyword(titleAndSellerKeyword)).or(sellerKeywordEq(titleAndSellerKeyword));
+        return result.or(containTitleKeyword(titleAndSellerKeyword)).or(containSellerKeyword(titleAndSellerKeyword));
     }
 }

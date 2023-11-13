@@ -13,12 +13,16 @@ import com.mini.auction.common.exceptionHandler.CustomResponse;
 import com.mini.auction.common.exceptionHandler.ExceptionCode;
 import com.mini.auction.common.exceptionHandler.customException.BadRequestException;
 import com.mini.auction.member.application.port.out.MemberNullCheck;
-import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @RequiredArgsConstructor
 @Service
@@ -76,7 +80,7 @@ class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<AuctionsRes> getWaitingAuctionsPage(Pageable pageable, AuctionsReq auctionsReq) {
         if(auctionsReq.getMinOpenDate() != null
             && auctionsReq.getMaxOpenDate() != null
@@ -92,7 +96,12 @@ class AuctionServiceImpl implements AuctionService {
             throw new BadRequestException(new CustomResponse(ExceptionCode.E30003));
         }
 
-        return auctionPort.getAuctionListByStateIsWaiting(pageable, auctionsReq);
+        Param dateTimeParam = new Param(
+            auctionsReq.getMinOpenDate().atTime(LocalTime.MIN), 
+            auctionsReq.getMaxOpenDate().plusDays(1).atTime(LocalTime.MIN)
+        );
+
+        return auctionPort.getAuctionListByStateIsWaiting(pageable, auctionsReq, dateTimeParam);
     }
 
 }

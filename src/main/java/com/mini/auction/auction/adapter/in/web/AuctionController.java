@@ -52,7 +52,7 @@ class AuctionController {
     @GetMapping("/list/waiting")
     Page<AuctionsRes> getWaitingAuctionsPage(
         Pageable pageable,
-        @RequestBody @Valid AuctionsReq auctionsReq
+        @Valid AuctionsReq auctionsReq
     ){
         return auctionService.getWaitingAuctionsPage(pageable, auctionsReq);
     }
