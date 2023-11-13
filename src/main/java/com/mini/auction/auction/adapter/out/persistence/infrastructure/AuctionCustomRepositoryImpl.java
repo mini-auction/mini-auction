@@ -97,6 +97,7 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
                 Projections.constructor(
                     AuctionsRes.class,
                     auctionEntity.id.as("auctionId"),
+                    // TODO: subquery와 join 성능 비교
                     ExpressionUtils.as(
                         JPAExpressions.select(memberEntity.name)
                             .from(memberEntity)
@@ -120,8 +121,6 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
             .from(auctionEntity)
             .where(auctionEntity.state.eq(AuctionState.WAITING).and(auctionEntity.isDeleted.isFalse()))
             .fetchFirst();
-
-        System.out.println(count);
 
         return PageableExecutionUtils.getPage(fetch, pageable, () -> count);
     }
