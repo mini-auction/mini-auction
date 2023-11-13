@@ -120,6 +120,8 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
                 .and(auctionEntity.isDeleted.isFalse())
                 .and(minOpenDateGoe(auctionsReq.getMinOpenDate()))
                 .and(maxOpenDateLt(auctionsReq.getMaxOpenDate()))
+                .and(minBidAmountGoe(auctionsReq.getMinBidAmount()))
+                .and(maxBidAmountLoe(auctionsReq.getMaxBidAmount()))
             )
             .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
             .offset(pageable.getOffset())
@@ -132,6 +134,8 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
                 .and(auctionEntity.isDeleted.isFalse())
                 .and(minOpenDateGoe(auctionsReq.getMinOpenDate()))
                 .and(maxOpenDateLt(auctionsReq.getMaxOpenDate()))
+                .and(minBidAmountGoe(auctionsReq.getMinBidAmount()))
+                .and(maxBidAmountLoe(auctionsReq.getMaxBidAmount()))
             )
             .fetchFirst();
 
@@ -161,6 +165,14 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
 
     private BooleanExpression maxOpenDateLt(LocalDate maxOpenDate){
         return maxOpenDate != null ? auctionEntity.openDateTime.lt(maxOpenDate.plusDays(1).atTime(LocalTime.MIN)) : null;
+    }
+
+    private BooleanExpression minBidAmountGoe(Integer minBidAmount){
+        return minBidAmount != null ? auctionEntity.minimumBidAmount.goe(minBidAmount) : null;
+    }
+
+    private BooleanExpression maxBidAmountLoe(Integer maxBidAmount){
+        return maxBidAmount != null ? auctionEntity.minimumBidAmount.loe(maxBidAmount) : null;
     }
 
 }

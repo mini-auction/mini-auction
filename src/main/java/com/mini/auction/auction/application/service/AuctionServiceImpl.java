@@ -78,9 +78,20 @@ class AuctionServiceImpl implements AuctionService {
     @Override
     @Transactional
     public Page<AuctionsRes> getWaitingAuctionsPage(Pageable pageable, AuctionsReq auctionsReq) {
-//        if(auctionsReq.getMaxOpenDate().isBefore(auctionsReq.getMinOpenDate())){
-//            throw new BadRequestException(new CustomResponse(ExceptionCode.E30002));
-//        }
+        if(auctionsReq.getMinOpenDate() != null
+            && auctionsReq.getMaxOpenDate() != null
+            && auctionsReq.getMaxOpenDate().isBefore(auctionsReq.getMinOpenDate())
+        ){
+            throw new BadRequestException(new CustomResponse(ExceptionCode.E30002));
+        }
+
+        if(auctionsReq.getMinBidAmount() != null
+            && auctionsReq.getMaxBidAmount() != null
+            && auctionsReq.getMaxBidAmount().compareTo(auctionsReq.getMinBidAmount()) < 0
+        ){
+            throw new BadRequestException(new CustomResponse(ExceptionCode.E30003));
+        }
+
         return auctionPort.getAuctionListByStateIsWaiting(pageable, auctionsReq);
     }
 

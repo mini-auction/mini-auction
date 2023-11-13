@@ -16,5 +16,9 @@ public class AuctionsReq {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate maxOpenDate;
 
+    private Integer minBidAmount;
+
+    private Integer maxBidAmount;
+
 
 }
