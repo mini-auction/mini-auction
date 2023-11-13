@@ -16,7 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "auction")
 class AuctionEntity extends BaseJpaEntity {
 
     @Comment("판매자 id")
