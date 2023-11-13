@@ -1,6 +1,7 @@
 package com.mini.auction.auction.adapter.out.persistence.infrastructure;
 
 import com.mini.auction.auction.adapter.in.web.dto.AuctionRes;
+import com.mini.auction.auction.adapter.in.web.dto.AuctionsReq;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionsRes;
 import com.mini.auction.auction.adapter.in.web.dto.CommentsInfo;
 import com.mini.auction.auction.adapter.out.persistence.QAuctionEntity;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,7 +93,7 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
     }
 
     @Override
-    public Page<AuctionsRes> getAuctionListByStateIsWaiting(Pageable pageable) {
+    public Page<AuctionsRes> getAuctionListByStateIsWaiting(Pageable pageable, AuctionsReq auctionsReq) {
         List<AuctionsRes> fetch = jpaQueryFactory
             .select(
                 Projections.constructor(
@@ -111,7 +113,9 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
                     auctionEntity.minimumBidAmount
                 )
             ).from(auctionEntity)
-            .where(auctionEntity.state.eq(AuctionState.WAITING).and(auctionEntity.isDeleted.isFalse()))
+            .where(auctionEntity.state.eq(AuctionState.WAITING).and(auctionEntity.isDeleted.isFalse())
+                .and(auctionEntity.openDateTime.goe(auctionsReq.getMinOpenDate().atStartOfDay()))
+                .and(auctionEntity.openDateTime.loe(auctionsReq.getMaxOpenDate().atTime(LocalTime.MAX))))
             .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -119,7 +123,9 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
 
         long count = jpaQueryFactory.select(auctionEntity.count())
             .from(auctionEntity)
-            .where(auctionEntity.state.eq(AuctionState.WAITING).and(auctionEntity.isDeleted.isFalse()))
+            .where(auctionEntity.state.eq(AuctionState.WAITING).and(auctionEntity.isDeleted.isFalse())
+                .and(auctionEntity.openDateTime.goe(auctionsReq.getMinOpenDate().atStartOfDay()))
+                .and(auctionEntity.openDateTime.loe(auctionsReq.getMaxOpenDate().atTime(LocalTime.MAX))))
             .fetchFirst();
 
         return PageableExecutionUtils.getPage(fetch, pageable, () -> count);

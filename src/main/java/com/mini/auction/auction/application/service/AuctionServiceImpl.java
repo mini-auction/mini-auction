@@ -2,6 +2,7 @@ package com.mini.auction.auction.application.service;
 
 import com.mini.auction.auction.adapter.in.web.dto.AuctionRes;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
+import com.mini.auction.auction.adapter.in.web.dto.AuctionsReq;
 import com.mini.auction.auction.adapter.in.web.dto.AuctionsRes;
 import com.mini.auction.auction.application.port.in.AuctionService;
 import com.mini.auction.auction.application.port.out.AuctionNullCheck;
@@ -12,13 +13,12 @@ import com.mini.auction.common.exceptionHandler.CustomResponse;
 import com.mini.auction.common.exceptionHandler.ExceptionCode;
 import com.mini.auction.common.exceptionHandler.customException.BadRequestException;
 import com.mini.auction.member.application.port.out.MemberNullCheck;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -76,8 +76,12 @@ class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public Page<AuctionsRes> getWaitingAuctionsPage(Pageable pageable) {
-        return auctionPort.getAuctionListByStateIsWaiting(pageable);
+    @Transactional
+    public Page<AuctionsRes> getWaitingAuctionsPage(Pageable pageable, AuctionsReq auctionsReq) {
+        if(auctionsReq.getMaxOpenDate().isBefore(auctionsReq.getMinOpenDate())){
+            throw new BadRequestException(new CustomResponse(ExceptionCode.E30002));
+        }
+        return auctionPort.getAuctionListByStateIsWaiting(pageable, auctionsReq);
     }
 
 }
