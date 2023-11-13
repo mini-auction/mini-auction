@@ -105,7 +105,9 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
                     ),
                     auctionEntity.title,
                     auctionEntity.openDateTime,
-                    auctionEntity.closedDateTime
+                    auctionEntity.closedDateTime,
+                    auctionEntity.createDateTime,
+                    auctionEntity.minimumBidAmount
                 )
             ).from(auctionEntity)
             .where(auctionEntity.state.eq(AuctionState.WAITING).and(auctionEntity.isDeleted.isFalse()))
