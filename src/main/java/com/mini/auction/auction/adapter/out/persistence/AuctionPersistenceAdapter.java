@@ -71,8 +71,8 @@ class AuctionPersistenceAdapter implements AuctionPort {
 
 
     @Override
-    public Page<AuctionsRes> getAuctionListBYStateIsWaiting(Pageable pageable) {
-        return auctionRepository.getAuctionListBYStateIsWaiting(pageable);
+    public Page<AuctionsRes> getAuctionListByStateIsWaiting(Pageable pageable) {
+        return auctionRepository.getAuctionListByStateIsWaiting(pageable);
     }
 
 }

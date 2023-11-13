@@ -20,5 +20,5 @@ public interface AuctionCustomRepository {
 
     void updateIsDeletedById(String id, boolean state);
 
-    Page<AuctionsRes> getAuctionListBYStateIsWaiting(Pageable pageable);
+    Page<AuctionsRes> getAuctionListByStateIsWaiting(Pageable pageable);
 }

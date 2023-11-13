@@ -77,7 +77,7 @@ class AuctionServiceImpl implements AuctionService {
 
     @Override
     public Page<AuctionsRes> getWaitingAuctionsPage(Pageable pageable) {
-        return auctionPort.getAuctionListBYStateIsWaiting(pageable);
+        return auctionPort.getAuctionListByStateIsWaiting(pageable);
     }
 
 }

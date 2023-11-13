@@ -91,7 +91,7 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
     }
 
     @Override
-    public Page<AuctionsRes> getAuctionListBYStateIsWaiting(Pageable pageable) {
+    public Page<AuctionsRes> getAuctionListByStateIsWaiting(Pageable pageable) {
         List<AuctionsRes> fetch = jpaQueryFactory
             .select(
                 Projections.constructor(
@@ -116,12 +116,14 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
             .limit(pageable.getPageSize())
             .fetch();
 
-        Long count = jpaQueryFactory.select(auctionEntity.count())
+        long count = jpaQueryFactory.select(auctionEntity.count())
             .from(auctionEntity)
             .where(auctionEntity.state.eq(AuctionState.WAITING).and(auctionEntity.isDeleted.isFalse()))
-            .fetchOne();
+            .fetchFirst();
 
-        return PageableExecutionUtils.getPage(fetch, pageable, () -> count == null ? 0 : count);
+        System.out.println(count);
+
+        return PageableExecutionUtils.getPage(fetch, pageable, () -> count);
     }
 
 
