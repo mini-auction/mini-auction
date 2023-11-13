@@ -48,8 +48,7 @@ class AuctionEntity extends BaseJpaEntity {
     private AuctionState state = AuctionState.WAITING;
 
     @Comment("댓글")
-    @Column(name = "comments_id")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "auction")
-    private List<CommentsEntity> comments = new ArrayList<CommentsEntity>();
+    private List<CommentsEntity> comments = new ArrayList<>();
 
 }
