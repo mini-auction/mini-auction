@@ -19,7 +19,7 @@ class CommentsEntity extends BaseJpaEntity {
     private String writer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_id")
+    @JoinColumn
     @Comment("경매글")
     private AuctionEntity auction;
 

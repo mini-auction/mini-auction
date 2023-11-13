@@ -10,7 +10,6 @@ public class CustomNamingStrategy extends CamelCaseToUnderscoresNamingStrategy {
     public Identifier toPhysicalTableName(Identifier logicalName, JdbcEnvironment jdbcEnvironment) {
         String originalText = logicalName.getText();
         String customText = originalText.substring(0, originalText.length() - 6);
-        System.out.println("check table naming : " + customText);
         return super.toPhysicalTableName(new Identifier(customText, logicalName.isQuoted()), jdbcEnvironment);
     }
 }
