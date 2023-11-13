@@ -8,7 +8,6 @@ import com.mini.auction.auction.application.port.out.AuctionPort;
 import com.mini.auction.auction.domain.Auction;
 import com.mini.auction.auction.domain.AuctionDetail;
 import com.mini.auction.common.domian.Money;
-import com.mini.auction.common.enums.AuctionState;
 import com.mini.auction.common.exceptionHandler.CustomResponse;
 import com.mini.auction.common.exceptionHandler.ExceptionCode;
 import com.mini.auction.common.exceptionHandler.customException.BadRequestException;
@@ -72,8 +71,8 @@ class AuctionPersistenceAdapter implements AuctionPort {
 
 
     @Override
-    public Page<AuctionsRes> findAllByStateIsWaitingPage(AuctionState WAITING, Pageable pageable) {
-        return auctionRepository.findAllByStateIsWaitingPage(WAITING, pageable);
+    public Page<AuctionsRes> getAuctionListBYStateIsWaiting(Pageable pageable) {
+        return auctionRepository.getAuctionListBYStateIsWaiting(pageable);
     }
 
 }

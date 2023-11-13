@@ -34,89 +34,90 @@ class AuctionCustomRepositoryImpl implements AuctionCustomRepository {
     @Override
     public void updateDetail(String id, AuctionDetail detail) {
         jpaQueryFactory.update(auctionEntity)
-                .set(auctionEntity.title, detail.getTitle())
-                .set(auctionEntity.contents, detail.getContents())
-                .set(auctionEntity.openDateTime, detail.getOpenDateTime())
-                .set(auctionEntity.closedDateTime, detail.getClosedDateTime())
-                .set(auctionEntity.minimumBidAmount, detail.getMinimumBidAmount().getAmount())
-                .set(auctionEntity.updateDateTime, LocalDateTime.now())
-                .where(auctionEntity.id.eq(id))
-                .execute();
+            .set(auctionEntity.title, detail.getTitle())
+            .set(auctionEntity.contents, detail.getContents())
+            .set(auctionEntity.openDateTime, detail.getOpenDateTime())
+            .set(auctionEntity.closedDateTime, detail.getClosedDateTime())
+            .set(auctionEntity.minimumBidAmount, detail.getMinimumBidAmount().getAmount())
+            .set(auctionEntity.updateDateTime, LocalDateTime.now())
+            .where(auctionEntity.id.eq(id))
+            .execute();
     }
 
     @Override
     public AuctionRes getAuctionDetailById(String id) {
-        return jpaQueryFactory.select(
-                        Projections.constructor(
-                                AuctionRes.class,
-                                auctionEntity.sellerId,
-                                auctionEntity.createDateTime,
-                                Projections.constructor(
-                                        AuctionDetail.class,
-                                        auctionEntity.title,
-                                        auctionEntity.contents,
-                                        auctionEntity.openDateTime,
-                                        auctionEntity.closedDateTime,
-                                        auctionEntity.minimumBidAmount
-                                )
-                        )
-                ).from(auctionEntity)
-                .where(auctionEntity.id.eq(id).and(auctionEntity.isDeleted.isFalse()))
-                .fetchOne();
+        return jpaQueryFactory
+            .select(
+                Projections.constructor(
+                    AuctionRes.class,
+                    auctionEntity.sellerId,
+                    auctionEntity.createDateTime,
+                    Projections.constructor(
+                        AuctionDetail.class,
+                        auctionEntity.title,
+                        auctionEntity.contents,
+                        auctionEntity.openDateTime,
+                        auctionEntity.closedDateTime,
+                        auctionEntity.minimumBidAmount
+                    )
+                )
+            ).from(auctionEntity)
+            .where(auctionEntity.id.eq(id).and(auctionEntity.isDeleted.isFalse()))
+            .fetchOne();
     }
 
     //
     @Override
     public List<CommentsInfo> getCommentsListByAuctionId(String auctionId) {
         return jpaQueryFactory.select(
-                        Projections.constructor(
-                                CommentsInfo.class,
-                                commentsEntity.writer,
-                                commentsEntity.contents,
-                                commentsEntity.createDateTime
-                        )
-                ).from(commentsEntity)
-                .where(commentsEntity.auction.id.eq(auctionId)
-                        .and(commentsEntity.isDeleted.isFalse()))
-                .fetch();
+                Projections.constructor(
+                    CommentsInfo.class,
+                    commentsEntity.writer,
+                    commentsEntity.contents,
+                    commentsEntity.createDateTime
+                )
+            ).from(commentsEntity)
+            .where(commentsEntity.auction.id.eq(auctionId)
+                .and(commentsEntity.isDeleted.isFalse()))
+            .fetch();
     }
 
     @Override
     public void updateIsDeletedById(String id, boolean state) {
         jpaQueryFactory.update(auctionEntity)
-                .set(auctionEntity.isDeleted, state)
-                .where(auctionEntity.id.eq(id))
-                .execute();
+            .set(auctionEntity.isDeleted, state)
+            .where(auctionEntity.id.eq(id))
+            .execute();
     }
 
     @Override
-    public Page<AuctionsRes> findAllByStateIsWaitingPage(AuctionState WAITING, Pageable pageable) {
+    public Page<AuctionsRes> getAuctionListBYStateIsWaiting(Pageable pageable) {
         List<AuctionsRes> fetch = jpaQueryFactory
-                .select(
-                        Projections.constructor(
-                                AuctionsRes.class,
-                                auctionEntity.id.as("auctionId"),
-                                ExpressionUtils.as(
-                                        JPAExpressions.select(memberEntity.name)
-                                                .from(memberEntity)
-                                                .where(memberEntity.id.eq(auctionEntity.sellerId)),
-                                        "sellerName"
-                                ),
-                                auctionEntity.title,
-                                auctionEntity.openDateTime,
-                                auctionEntity.closedDateTime
-                        )
-                ).from(auctionEntity)
-                .where(auctionEntity.state.eq(WAITING))
-                .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+            .select(
+                Projections.constructor(
+                    AuctionsRes.class,
+                    auctionEntity.id.as("auctionId"),
+                    ExpressionUtils.as(
+                        JPAExpressions.select(memberEntity.name)
+                            .from(memberEntity)
+                            .where(memberEntity.id.eq(auctionEntity.sellerId)),
+                        "sellerName"
+                    ),
+                    auctionEntity.title,
+                    auctionEntity.openDateTime,
+                    auctionEntity.closedDateTime
+                )
+            ).from(auctionEntity)
+            .where(auctionEntity.state.eq(AuctionState.WAITING).and(auctionEntity.isDeleted.isFalse()))
+            .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
 
         Long count = jpaQueryFactory.select(auctionEntity.count())
-                .from(auctionEntity)
-                .where(auctionEntity.state.eq(WAITING).and(auctionEntity.isDeleted.eq(false)))
-                .fetchOne();
+            .from(auctionEntity)
+            .where(auctionEntity.state.eq(AuctionState.WAITING).and(auctionEntity.isDeleted.isFalse()))
+            .fetchOne();
 
         return PageableExecutionUtils.getPage(fetch, pageable, () -> count == null ? 0 : count);
     }

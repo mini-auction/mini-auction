@@ -28,6 +28,6 @@ public interface AuctionPort {
 
     void updateIsDeletedById(String id, boolean state);
 
-    Page<AuctionsRes> findAllByStateIsWaitingPage(AuctionState WAITING, Pageable pageable);
+    Page<AuctionsRes> getAuctionListBYStateIsWaiting(Pageable pageable);
 
 }

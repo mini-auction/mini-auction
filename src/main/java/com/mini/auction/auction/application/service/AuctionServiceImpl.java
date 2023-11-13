@@ -8,7 +8,6 @@ import com.mini.auction.auction.application.port.out.AuctionNullCheck;
 import com.mini.auction.auction.application.port.out.AuctionPort;
 import com.mini.auction.auction.application.port.out.AuctionTermsMappingLogPort;
 import com.mini.auction.auction.application.port.out.TermsNullCheck;
-import com.mini.auction.common.enums.AuctionState;
 import com.mini.auction.common.exceptionHandler.CustomResponse;
 import com.mini.auction.common.exceptionHandler.ExceptionCode;
 import com.mini.auction.common.exceptionHandler.customException.BadRequestException;
@@ -78,7 +77,7 @@ class AuctionServiceImpl implements AuctionService {
 
     @Override
     public Page<AuctionsRes> getWaitingAuctionsPage(Pageable pageable) {
-        return auctionPort.findAllByStateIsWaitingPage(AuctionState.WAITING, pageable);
+        return auctionPort.getAuctionListBYStateIsWaiting(pageable);
     }
 
 }
