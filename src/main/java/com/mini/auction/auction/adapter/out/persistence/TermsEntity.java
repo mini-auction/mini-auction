@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Entity
-@Table(name = "terms")
 class TermsEntity extends BaseJpaEntity {
 
     @Column
