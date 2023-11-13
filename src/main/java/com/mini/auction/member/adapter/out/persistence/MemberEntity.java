@@ -3,7 +3,6 @@ package com.mini.auction.member.adapter.out.persistence;
 import com.mini.auction.common.domian.BaseJpaEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
