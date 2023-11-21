@@ -1,9 +1,7 @@
 package com.mini.auction.auction.adapter.out.persistence;
 
-import com.mini.auction.auction.adapter.in.web.dto.AuctionRes;
-import com.mini.auction.auction.adapter.in.web.dto.AuctionReq;
-import com.mini.auction.auction.adapter.in.web.dto.AuctionsRes;
-import com.mini.auction.auction.adapter.in.web.dto.CommentsInfo;
+import com.mini.auction.auction.adapter.in.web.dto.*;
+import com.mini.auction.auction.application.port.in.AuctionService;
 import com.mini.auction.auction.application.port.out.AuctionPort;
 import com.mini.auction.auction.domain.Auction;
 import com.mini.auction.auction.domain.AuctionDetail;
@@ -71,8 +69,8 @@ class AuctionPersistenceAdapter implements AuctionPort {
 
 
     @Override
-    public Page<AuctionsRes> getAuctionListByStateIsWaiting(Pageable pageable) {
-        return auctionRepository.getAuctionListByStateIsWaiting(pageable);
+    public Page<AuctionsRes> getAuctionListByStateIsWaiting(Pageable pageable, AuctionsReq auctionsReq, AuctionService.Param dateTimeParam) {
+        return auctionRepository.getAuctionListByStateIsWaiting(pageable, auctionsReq, dateTimeParam);
     }
 
 }
