@@ -1,43 +1,39 @@
 package com.mini.auction.member.adapter.in.web;
 
 import com.mini.auction.ApiTest;
-import com.mini.auction.member.adapter.in.web.dto.RegistrationInfoReq;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class AccountControllerTest extends ApiTest {
 
     @Test
     void registrationMember() {
 
-        final var request  = new RegistrationInfoReq(
-            "test_name",
-            "testpassword12!@",
-            "test_email@dwd.com",
-            "010-2123-4213"
-        );
+        final var request  = AccountSteps.createRegistartionInfo();
 
-        final var response = registrationMember(request);
+        final var response = AccountSteps.registrationMember(request);
 
         assertEquals(response.statusCode(), HttpStatus.OK.value());
     }
 
-    private ExtractableResponse<Response> registrationMember(RegistrationInfoReq request) {
-        return RestAssured.given().log().all()
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .body(request)
-            .when()
-            .post("/account/registration")
-            .then().log().all().extract();
+
+    @Test
+    void login() {
+
+        AccountSteps.registrationMember(AccountSteps.createRegistartionInfo());
+
+        final var request = AccountSteps.longinReq();
+
+        ExtractableResponse<Response> response = AccountSteps.login(request);
+
+        assertEquals(response.statusCode(), HttpStatus.OK.value());
+        assertFalse(response.header(HttpHeaders.AUTHORIZATION).isEmpty());
     }
 
 }

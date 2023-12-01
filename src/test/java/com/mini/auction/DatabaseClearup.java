@@ -24,7 +24,6 @@ public class DatabaseClearup implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        System.out.println("되나?");
         CustomNamingStrategy a = new CustomNamingStrategy();
         // JPA Entity를 모두 가져옴
         final Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
