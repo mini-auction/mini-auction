@@ -7,6 +7,7 @@ import com.mini.auction.member.adapter.in.web.dto.RegistrationInfoReq;
 import com.mini.auction.member.application.port.in.AccountService;
 import com.mini.auction.member.application.port.out.AccountPort;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ class AccountServiceImpl implements AccountService {
     private final JwtService jwtService;
 
     @Override
+    @Transactional
     public void createMember(RegistrationInfoReq req) {
         accountPort.save(req);
     }
